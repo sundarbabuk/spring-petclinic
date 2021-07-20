@@ -1,0 +1,286 @@
+pipeline {
+    agent any
+    environment {
+        AWS_DEFAULT_REGION="us-east-2"
+        AWS_ACCESS_KEY_ID=credentials("AWS_ACCESS_KEY_ID")
+        AWS_SECRET_ACCESS_KEY=credentials("AWS_SECRET_ACCESS_KEY")
+        // http_proxy="http://4270db9afac8.ngrok.io"
+        // https_proxy="https://4270db9afac8.ngrok.io"
+        // PATH="$PATH:$HOME/dctlenv/bin/"
+    }
+    parameters {
+        choice(
+            choices: ['main' , 'master'],
+            description: '',
+            name: 'BRANCH_NAME')
+    }
+    
+    options {
+        ansiColor('xterm')
+    }
+
+    stages {
+      
+        stage("Build") {
+            steps {
+                echo "Completed Successfully"
+            }
+        }
+
+        stage("Preliminary Test") {
+            failFast true
+            parallel {
+                stage("1-Unit Test") {
+                    steps {
+                        echo "Unit Test Completed Successfully"
+            }
+        }
+        
+                stage("2-Static Code Analysis") {
+                    steps {
+                        echo "Static Code Analysis Completed Successfully"
+            }
+        }
+
+                stage("3-SCA") {
+                    steps {
+                        echo "Sofware Composistion Analysis Completed  Successfully"
+                    }
+                }
+
+                stage("4-SAST") {
+                    steps {
+                        echo "Static Application Security Testing Completed Successfully"
+                    }
+                }
+            }
+        }
+
+
+        stage("Dockerization") {
+            failFast true
+            parallel {
+                stage("1-Build & Sign Docker Image") {
+                    steps {
+                        echo "Docker Image Built & Signed Successfully"
+                    }
+                }
+                               
+                stage("2-Docker Image Analyzer") {
+                    steps {
+                        echo "Docker Image Analyzed Successfully"
+                    }
+                }
+
+                stage("3-Docker Image Vulnerability Scan") {
+                    steps {
+                        echo "Completed Successfully"
+                    }
+                }
+
+                stage("4-STIG Compliance Validation") {
+                    steps {
+                        echo "Completed Successfully"
+                    }
+                }
+
+                stage("5-Push image to Artifactory") {
+                    steps {
+                        echo "Completed Successfully"
+                    }
+                }
+            }
+        }
+
+        stage("Dev Test") {
+            failFast true
+            parallel {
+                stage("1-Provision Dev Environment") {
+                    steps {
+                        echo "Completed Successfully"
+                    }
+                }
+                
+                stage("2-Validate Docker Image Signature") {
+                    steps {
+                        echo "Completed Successfully"
+                    }
+                }
+
+                stage("3-Deploy latest image from Artifactory") {
+                    steps {
+                        echo "Completed Successfully"
+                    }
+                }
+
+                stage("4-Functional Test") {
+                    steps {
+                        echo "Completed Successfully"
+                    }
+                }
+
+                stage("5-Integration Test") {
+                    steps {
+                        echo "Completed Successfully"
+                    }
+                }
+
+                stage("6-Destroy Dev Environment") {
+                    steps {
+                        echo "Completed Successfully"
+                    }
+                }
+            }
+        }
+
+
+        stage("Test Automation") {
+            failFast true
+            parallel {
+                stage("1-Provision Test Environment") {
+                    steps {
+                        echo "Completed Successfully"
+                    }
+                }
+                
+                stage("2-Validate Docker Image Signature") {
+                    steps {
+                        echo "Completed Successfully"
+                    }
+                }
+
+                stage("3-Deploy latest image from Artifactory") {
+                    steps {
+                        echo "Completed Successfully"
+                    }
+                }
+
+                stage("4-System Performance Test") {
+                    steps {
+                        echo "Completed Successfully"
+                    }
+                }
+
+                stage("5-System Reliability Test") {
+                    steps {
+                        echo "Completed Successfully"
+                    }
+                }
+
+                stage("6-System Resiliency Test") {
+                    steps {
+                        echo "Completed Successfully"
+                    }
+                }
+
+                stage("7-System Compatibility Test") {
+                    steps {
+                        echo "Completed Successfully"
+                    }
+                }
+
+                stage("8-System Conformance Test") {
+                    steps {
+                        echo "Completed Successfully"
+                    }
+                }
+
+                stage("9-DAST Test") {
+                    steps {
+                        echo "Completed Successfully"
+                    }
+                }
+
+                stage("10-PEN Test") {
+                    steps {
+                        echo "Completed Successfully"
+                    }
+                }
+
+                stage("11-IAST Test") {
+                    steps {
+                        echo "Completed Successfully"
+                    }
+                }
+
+                stage("12-API Security Test") {
+                    steps {
+                        echo "Completed Successfully"
+                    }
+                }
+
+                stage("13-Service Virtualization Test") {
+                    steps {
+                        echo "Completed Successfully"
+                    }
+                }
+
+                stage("14-Regression Test") {
+                    steps {
+                        echo "Completed Successfully"
+                    }
+                }
+
+                stage("15-Generate SBOM") {
+                    steps {
+                        echo "Completed Successfully"
+                    }
+                }
+
+                stage("16-Destroy Dev Environment") {
+                    steps {
+                        echo "Completed Successfully"
+                    }
+                }
+            }
+        }
+
+
+        stage("UAT-In Production") {
+            failFast true
+            parallel {
+                stage("1-Validate Docker Image Signature") {
+                    steps {
+                        echo "Completed Successfully"
+                    }
+                }
+
+                stage("2-Dark Launch of latest image from Artifactory") {
+                    steps {
+                        echo "Completed Successfully"
+                    }
+                }
+
+                stage("3-Functional Acceptance Test") {
+                    steps {
+                        echo "Completed Successfully"
+                    }
+                }
+
+                stage("4-Performance Acceptance Test") {
+                    steps {
+                        echo "Completed Successfully"
+                    }
+                }
+
+                stage("5-SLA Contract Acceptance Test") {
+                    steps {
+                        echo "Completed Successfully"
+                    }
+                }
+
+                stage("6-Regulatory Compliance Test") {
+                    steps {
+                        echo "Completed Successfully"
+                    }
+                }
+
+                stage("7-Generate SBOM") {
+                    steps {
+                        echo "Completed Successfully"
+                    }
+                }
+            }
+        }
+    }
+}
