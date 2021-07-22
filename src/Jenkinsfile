@@ -40,14 +40,14 @@ pipeline {
             }
         }
 
-        // stage('Staticcode Aanalysis') {
-        //     steps {
-        //         withSonarQubeEnv('sonar') {
-        //             sh '${mvnCMD} org.sonarsource.scanner.maven:sonar-maven-plugin:3.2:sonar' 
+        stage('Staticcode Aanalysis') {
+            steps {
+                withSonarQubeEnv('sonar') {
+                    sh '${mvnCMD} org.sonarsource.scanner.maven:sonar-maven-plugin:3.2:sonar' 
                     
-        //         }
-        //     }
-        // }
+                }
+            }
+        }
 
         
         stage("Dockerization") {
