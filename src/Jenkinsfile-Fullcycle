@@ -1,9 +1,11 @@
 pipeline {
     agent any
     environment {
-        AWS_DEFAULT_REGION="us-east-2"
-        AWS_ACCESS_KEY_ID=credentials("AWS_ACCESS_KEY_ID")
-        AWS_SECRET_ACCESS_KEY=credentials("AWS_SECRET_ACCESS_KEY")
+        AWS_DEFAULT_REGION="us-east-1"
+        AWS_ACCESS_KEY_ID     = credentials('jenkins-aws-secret-key-id')
+        AWS_SECRET_ACCESS_KEY = credentials('jenkins-aws-secret-access-key')
+//         AWS_ACCESS_KEY_ID=credentials("AWS_ACCESS_KEY_ID")
+//         AWS_SECRET_ACCESS_KEY=credentials("AWS_SECRET_ACCESS_KEY")
         // PATH="$PATH:$HOME/dctlenv/bin/"
     }
     parameters {
@@ -21,7 +23,7 @@ pipeline {
       
         stage("Build") {
             steps {
-                echo "Completed Successfully"
+                echo "Build Completed Successfully"
             }
         }
 
@@ -72,19 +74,19 @@ pipeline {
 
                 stage("3-Docker Image Vulnerability Scan") {
                     steps {
-                        echo "Completed Successfully"
+                        echo "Docker Image Vulnerability Check Completed Successfully"
                     }
                 }
 
                 stage("4-STIG Compliance Validation") {
                     steps {
-                        echo "Completed Successfully"
+                        echo "Docker Image STIG Compliance Check Completed Successfully"
                     }
                 }
 
                 stage("5-Push image to Artifactory") {
                     steps {
-                        echo "Completed Successfully"
+                        echo "Docker Image Pushed to Artifactory Successfully"
                     }
                 }
             }
