@@ -62,7 +62,7 @@ pipeline {
         
         stage("Dockerization") {
             failFast true
-    //         parallel {
+            parallel {
         stage("1-Build Docker Image") {
             steps {
                 script {
@@ -90,7 +90,7 @@ pipeline {
 
                 }
 
-    //         }
+            }
         }
 
         stage("Sign & Push Image to Registry") {
