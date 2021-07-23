@@ -48,12 +48,12 @@ pipeline {
     //         tools {
     //             jdk "jdk11" 
     //         }
-            environment {
-                scannerHome = tool 'sonar' 
-            }
+    //         environment {
+    //             scannerHome = tool 'sonar' 
+    //         }
             steps {
-                withSonarQubeEnv(installationName: 'sonar') {
-                    sh '${scannerHome}/bin/sonar-scanner -X' 
+                withSonarQubeEnv(credentialsId: 'sonar', installationName: 'sonar') {
+                    sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar' 
                     
                 }
             }
