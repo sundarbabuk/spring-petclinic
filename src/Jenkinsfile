@@ -29,13 +29,15 @@ pipeline {
       
         stage("Build") {
             steps {
-                sh "${mvnCMD} clean install -DskipTests"
+    //             sh "${mvnCMD} clean install -DskipTests"
+                sh "mvn clean install -DskipTests"
             }
         }
 
         stage("Unit Test") {
             steps {
-                sh "${mvnCMD} test"
+        //         sh "${mvnCMD} test"
+                sh "mvn test"
                 junit 'target/surefire-reports/*.xml'
             }
         }
