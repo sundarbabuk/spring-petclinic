@@ -8,7 +8,7 @@ pipeline {
         def mvnHome = tool name: 'maven-3', type: 'maven'
         def mvnCMD = "${mvnHome}/bin/mvn"
         def scannerHome = tool 'sonar'
-        JAVA_HOME='${scannerHome}/jre'
+        JAVA_HOME='${scannerHome}/jdk'
     //     def dockerHome = tool 'docker'
     //     PATH = "${dockerHome}/bin:${env.PATH}"
     //     registry = "sundarbabu/pet" 
