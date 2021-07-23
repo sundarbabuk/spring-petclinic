@@ -9,11 +9,11 @@ pipeline {
         def mvnCMD = "${mvnHome}/bin/mvn"
     //     def scannerHome = tool 'sonar'
     //     JAVA_HOME='${scannerHome}/jdk'
-    //     def dockerHome = tool 'docker'
-    //     PATH = "${dockerHome}/bin:${env.PATH}"
-    //     registry = "sundarbabu/pet" 
-    //     registryCredential = 'dockerhub' 
-    //     dockerImage = ''
+        def dockerHome = tool 'docker'
+        PATH = "${dockerHome}/bin:${env.PATH}"
+        registry = "sundarbabu/pet" 
+        registryCredential = 'dockerhub' 
+        dockerImage = ''
      
     }
     parameters {
