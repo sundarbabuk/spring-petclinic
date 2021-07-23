@@ -5,13 +5,13 @@ pipeline {
     //     AWS_ACCESS_KEY_ID=credentials("AWS_ACCESS_KEY_ID")
     //     AWS_SECRET_ACCESS_KEY=credentials("AWS_SECRET_ACCESS_KEY")
         // PATH="$PATH:$HOME/dctlenv/bin/"
-        def mvnHome = tool name: 'maven-3', type: 'maven'
-        def mvnCMD = "${mvnHome}/bin/mvn"
-        def dockerHome = tool 'docker'
-        PATH = "${dockerHome}/bin:${env.PATH}"
-        registry = "sundarbabu/pet" 
-        registryCredential = 'dockerhub' 
-        dockerImage = ''
+    //     def mvnHome = tool name: 'maven-3', type: 'maven'
+    //     def mvnCMD = "${mvnHome}/bin/mvn"
+    //     def dockerHome = tool 'docker'
+    //     PATH = "${dockerHome}/bin:${env.PATH}"
+    //     registry = "sundarbabu/pet" 
+    //     registryCredential = 'dockerhub' 
+    //     dockerImage = ''
      
     }
     parameters {
