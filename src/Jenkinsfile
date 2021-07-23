@@ -1,9 +1,9 @@
 pipeline {
     agent any
     environment {
-    //     AWS_DEFAULT_REGION="us-east-1"
-    //     AWS_ACCESS_KEY_ID=credentials("AWS_ACCESS_KEY_ID")
-    //     AWS_SECRET_ACCESS_KEY=credentials("AWS_SECRET_ACCESS_KEY")
+        AWS_DEFAULT_REGION="us-east-1"
+        AWS_ACCESS_KEY_ID=credentials("AWS_ACCESS_KEY_ID")
+        AWS_SECRET_ACCESS_KEY=credentials("AWS_SECRET_ACCESS_KEY")
         // PATH="$PATH:$HOME/dctlenv/bin/"
         def mvnHome = tool name: 'maven-3', type: 'maven'
         def mvnCMD = "${mvnHome}/bin/mvn"
@@ -23,9 +23,9 @@ pipeline {
             name: 'BRANCH_NAME')
     }
     
-    // options {
-    //     ansiColor('xterm')
-    // }
+    options {
+        ansiColor('xterm')
+    }
 
     stages {
       
@@ -90,7 +90,7 @@ pipeline {
 
                 }
 
-            }
+    //         }
         }
 
         stage("Sign & Push Image to Registry") {
