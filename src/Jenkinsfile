@@ -45,7 +45,7 @@ pipeline {
         stage('Staticcode Aanalysis') {
             steps {
                 withSonarQubeEnv('sonar') {
-                    sh '${mvnCMD} org.sonarsource.scanner.maven:sonar-maven-plugin:3.2:sonar' 
+                    sh '${mvnCMD} clean package sonar:sonar' 
                     
                 }
             }
