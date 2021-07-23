@@ -45,7 +45,7 @@ pipeline {
         stage('Staticcode Aanalysis') {
             steps {
                 withSonarQubeEnv('sonar') {
-                    sh '${mvnCMD} clean package sonar:sonar' 
+                    sh '${mvnCMD} test sonar:sonar' 
                     
                 }
             }
