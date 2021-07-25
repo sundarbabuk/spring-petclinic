@@ -1,0 +1,61 @@
+pipeline {
+    agent any
+    environment {
+        AWS_DEFAULT_REGION="us-east-1"
+        AWS_ACCESS_KEY_ID     = credentials('jenkins-aws-secret-key-id')
+        AWS_SECRET_ACCESS_KEY = credentials('jenkins-aws-secret-access-key')
+    //     AWS_ACCESS_KEY_ID=credentials("AWS_ACCESS_KEY_ID")
+    //     AWS_SECRET_ACCESS_KEY=credentials("AWS_SECRET_ACCESS_KEY")
+        // PATH="$PATH:$HOME/dctlenv/bin/"
+        def mvnHome = tool name: 'maven-3', type: 'maven'
+        def mvnCMD = "${mvnHome}/bin/mvn"
+    //     def scannerHome = tool 'sonar'
+    //     JAVA_HOME='${scannerHome}/jdk'
+        def dockerHome = tool 'docker'
+        PATH = "${dockerHome}/bin:${env.PATH}"
+        registry = "sundarbabu/pet" 
+        registryCredential = 'dockerhub' 
+        dockerImage = 'sundarbabu/pet:v1.0.0'
+     
+    }
+    parameters {
+        choice(
+            choices: ['main' , 'master'],
+            description: '',
+            name: 'BRANCH_NAME')
+    }
+    
+    options {
+        ansiColor('xterm')
+    }
+
+    stages {
+      
+        stage("Build") {
+            steps {
+                sh "${mvnCMD} clean install -DskipTests"
+    //             sh "mvn clean install -DskipTests"
+            }
+        }
+
+                
+        stage("1-Build Docker Image") {
+            steps {
+                script {
+                    dockerImage = docker.build registry + ":v1.0.0"
+                } 
+            }
+        }
+    
+        stage("Sign & Push Image to Registry") {
+            steps {
+                script {
+                    docker.withRegistry( 'https://hub.docker.com/', 'dockerhub' ) { 
+                        dockerImage.push ()
+                    }
+                }
+            }
+        }
+    }
+}
+
