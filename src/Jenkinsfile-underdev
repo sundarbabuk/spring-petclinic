@@ -53,7 +53,7 @@ pipeline {
                 script {
                     docker.withTool('docker') {                   
                         docker.withRegistry( '', 'dockerhub' ) { 
-                            dockerImage.push ('sundarbabu/pet:v1.0.0')
+                            dockerImage.push ()
                         }
                     }
                 }
