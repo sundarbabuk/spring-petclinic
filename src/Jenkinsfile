@@ -98,7 +98,8 @@ pipeline {
         stage("Sign & Push Image to Registry") {
             steps {
                 script {
-                    docker.withRegistry( 'https://hub.docker.com/', 'dockerhub' ) { 
+                    docker.withTool('docker') {
+                        docker.withRegistry( '', 'dockerhub' ) { 
                         dockerImage.push ()
                     }
                 }
