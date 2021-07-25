@@ -51,9 +51,10 @@ pipeline {
         stage("Sign & Push Image to Registry") {
             steps {
                 script {
-                    docker.withTool('docker')                    
+                    docker.withTool('docker') {                   
                         docker.withRegistry( 'https://hub.docker.com/', 'dockerhub' ) { 
-                            dockerImage.push 'sundarbabu/pet:v1.0.0'
+                            dockerImage.push ('sundarbabu/pet:v1.0.0')
+                        }
                     }
                 }
             }
