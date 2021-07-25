@@ -15,7 +15,7 @@ pipeline {
         PATH = "${dockerHome}/bin:${env.PATH}"
         registry = "sundarbabu/pet" 
         registryCredential = 'dockerhub' 
-        dockerImage = ''
+        dockerImage = 'sundarbabu/pet:v1.0.0'
      
     }
     parameters {
@@ -99,7 +99,7 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry( 'https://hub.docker.com/', 'dockerhub' ) { 
-                        dockerImage.push()
+                        dockerImage.push ()
                     }
                 }
             }
