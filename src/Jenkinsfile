@@ -109,7 +109,8 @@ pipeline {
 
         stage('Cleaning up Registry') { 
             steps { 
-                sh "docker rmi $registry:$BUILD_NUMBER"
+    //             sh "docker rmi $registry:$BUILD_NUMBER"
+    //             sh "docker rmi $registry:v1.0.0"
             }
         }
                 
