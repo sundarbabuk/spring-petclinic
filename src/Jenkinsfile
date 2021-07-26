@@ -61,6 +61,14 @@ pipeline {
             }
         }
 
+        stage("Quality Gate") {
+            steps {
+              timeout(time: 1, unit: 'HOURS') {
+                waitForQualityGate abortPipeline: true
+                }
+            }
+        }
+
         
         stage("Dockerization") {
             failFast true
@@ -101,11 +109,14 @@ pipeline {
                     docker.withTool('docker') {
                         docker.withRegistry( '', 'dockerhub' ) { 
                         dockerImage.push ()
+                        }
                     }
                 }
             }
         }
-        }
+
+        
+        
 
     //     stage('Cleaning up Registry') { 
     //         steps { 
