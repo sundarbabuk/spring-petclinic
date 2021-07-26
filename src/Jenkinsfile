@@ -67,7 +67,7 @@ pipeline {
                 waitForQualityGate abortPipeline: true
                 }
             }
-        }
+        
 
         
         stage("Dockerization") {
@@ -114,8 +114,8 @@ pipeline {
                 }
             }
         }
-
-        
+    }   
+}      
         
 
     //     stage('Cleaning up Registry') { 
@@ -125,5 +125,5 @@ pipeline {
     //         }
     //     }
                 
-}
+
 
