@@ -13,9 +13,9 @@ pipeline {
     //     JAVA_HOME='${scannerHome}/jdk'
         def dockerHome = tool 'docker'
         PATH = "${dockerHome}/bin:${env.PATH}"
-        registry = "sundarbabu/pet" 
+        registry = "sundarbabu/petdemo" 
         registryCredential = 'dockerhub' 
-        dockerImage = 'sundarbabu/pet:v1.0.0'
+        dockerImage = 'sundarbabu/petdemo:v1.0.0'
         DOCKER_CONTENT_TRUST=1
      
     }
@@ -84,19 +84,19 @@ pipeline {
 
         stage("2-Docker Image Aanalysis") {
             steps {
-                sh '/var/jenkins_home/dive sundarbabu/pet:v1.0.0'
+                sh '/var/jenkins_home/dive sundarbabu/petdemo:v1.0.0'
             } 
         }
 
         stage("3-Vulnerability Aanalysis") {
             steps {
-                sh '/var/jenkins_home/grype sundarbabu/pet:v1.0.0'
+                sh '/var/jenkins_home/grype sundarbabu/petdemo:v1.0.0'
             }
         }
 
         stage("4-SBOM Generation") {
             steps {
-                sh '/var/jenkins_home/syft sundarbabu/pet:v1.0.0'
+                sh '/var/jenkins_home/syft sundarbabu/petdemo:v1.0.0'
                     }
 
                 }
