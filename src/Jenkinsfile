@@ -16,7 +16,7 @@ pipeline {
         registry = "sundarbabu/petdemo" 
         registryCredential = 'dockerhub' 
         dockerImage = 'sundarbabu/petdemo:v1.0.0'
-        DOCKER_CONTENT_TRUST=1
+    //     DOCKER_CONTENT_TRUST=1
      
     }
     parameters {
