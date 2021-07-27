@@ -13,9 +13,9 @@ pipeline {
     //     JAVA_HOME='${scannerHome}/jdk'
         def dockerHome = tool 'docker'
         PATH = "${dockerHome}/bin:${env.PATH}"
-        registry = "sundarbabu/pet" 
+        registry = "sundarbabu/petdemo" 
         registryCredential = 'dockerhub' 
-        dockerImage = 'sundarbabu/pet:v1.0.0'
+        dockerImage = 'sundarbabu/petdemo:v1.0.0'
         
      
     }
