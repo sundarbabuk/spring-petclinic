@@ -15,7 +15,7 @@ pipeline {
         PATH = "${dockerHome}/bin:${env.PATH}"
         registry = "sundarbabu/petdemo" 
         registryCredential = 'dockerhub' 
-        dockerImage = 'sundarbabu/petdemo:v1.0.0'
+        dockerImage = 'sundarbabu/petdemo:v3.0.0'
         
      
     }
@@ -43,7 +43,7 @@ pipeline {
         stage("1-Build Docker Image") {
             steps {
                 script {
-                    dockerImage = docker.build registry + ":v1.0.0"
+                    dockerImage = docker.build registry + ":v3.0.0"
                 } 
             }
         }
