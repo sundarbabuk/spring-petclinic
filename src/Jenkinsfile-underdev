@@ -39,6 +39,17 @@ pipeline {
             }
         }
 
+
+        stage('SAST Test') {
+            steps {
+                echo 'Static Application Security Testing under progress...'
+                snykSecurity(
+                snykInstallation: 'snyk',
+                snykTokenId: 'snyk',
+          // place other parameters here
+                )
+            }
+        }
                 
         stage("1-Build Docker Image") {
             steps {
