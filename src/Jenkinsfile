@@ -69,6 +69,16 @@ pipeline {
                 }
             }
         
+        stage('Code Security (SAST) Test') {
+            steps {
+                echo 'Static Application Security Testing under progress...'
+                snykSecurity(
+                snykInstallation: 'snyk',
+                snykTokenId: 'snyk',
+                failOnIssues: 'false'
+                )
+            }
+        }
 
         
         stage("Dockerization") {
