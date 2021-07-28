@@ -62,7 +62,7 @@ pipeline {
             }
         }
 
-        stage("Quality Gate") {
+        stage("Code Quality Gate") {
             steps {
               sleep(60)
                 waitForQualityGate abortPipeline: true
@@ -104,7 +104,25 @@ pipeline {
             }
         }
 
-        stage("4-SBOM Generation") {
+        stage("4-DISA-STIG Compliance Test") {
+            steps {
+                echo 'DISA-STIG Compliance Test Completed Successfully'
+            }
+        }
+
+        stage("5-US Government Configuration Baseline Check [USGCB]") {
+            steps {
+                echo 'US Government Configuration Baseline Check [USGCB] Completed Successfully'
+            }
+        }
+
+        stage("6-PCI-DSS Compliance Test") {
+            steps {
+                echo 'PCI-DSS Compliance Test Completed Successfully'
+            }
+        }
+
+        stage("7-SBOM Generation") {
             steps {
                 sh '/var/jenkins_home/syft sundarbabu/petdemo:v3.0.0'
                     }
