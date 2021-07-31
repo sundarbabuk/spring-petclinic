@@ -125,69 +125,11 @@
       <artifactId>spring-boot-devtools</artifactId>
       <optional>true</optional>
     </dependency>
-
-    <!-- Cucumber-->
-    <dependency>
-      <groupId>info.cukes</groupId>
-      <artifactId>cucumber-java</artifactId>
-      <version>${cucumber-version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>info.cukes</groupId>
-      <artifactId>cucumber-junit</artifactId>
-      <version>${cucumber-version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>info.cukes</groupId>
-      <artifactId>cucumber-spring</artifactId>
-      <version>${cucumber-version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.retry</groupId>
-      <artifactId>spring-retry</artifactId>
-      <version>${spring.retry.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.modelmapper</groupId>
-      <artifactId>modelmapper</artifactId>
-      <version>${modelmapper-version}</version>
-    </dependency>
-
+    
   </dependencies>
 
   <build>
-    <plugins><!-- Cucumber-->
-        <dependency>
-            <groupId>info.cukes</groupId>
-            <artifactId>cucumber-java</artifactId>
-            <version>${cucumber-version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>info.cukes</groupId>
-            <artifactId>cucumber-junit</artifactId>
-            <version>${cucumber-version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>info.cukes</groupId>
-            <artifactId>cucumber-spring</artifactId>
-            <version>${cucumber-version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.retry</groupId>
-            <artifactId>spring-retry</artifactId>
-            <version>${spring.retry.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.modelmapper</groupId>
-            <artifactId>modelmapper</artifactId>
-            <version>${modelmapper-version}</version>
-        </dependency>
+    <plugins>
       <plugin>
         <groupId>io.spring.javaformat</groupId>
         <artifactId>spring-javaformat-maven-plugin</artifactId>
