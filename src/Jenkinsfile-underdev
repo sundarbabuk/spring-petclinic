@@ -39,8 +39,16 @@ pipeline {
             }
         }
 
+        stage("Performance Test") {
+            steps {
+                sh 'Xvfb :0 >& /dev/null &'
+                sh' mvn jmeter:jmeter -Pjmeter'                    
+                perfReport 'target/jmeter/results/pet.jtl'
+            }
+        }
 
-        stage('SAST Test') {
+
+        stage("SAST Test") {
             steps {
                 echo 'Static Application Security Testing under progress...'
                 snykSecurity(
