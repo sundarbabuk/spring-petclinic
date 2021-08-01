@@ -41,9 +41,9 @@ pipeline {
 
         stage("Performance Test") {
             steps {
-                sh 'Xvfb :0 >& /dev/null &'
-                sh '/var/jenkins_home/bzt petclinic_test_plan.jmx'                    
-        //         perfReport 'target/jmeter/results/pet.jtl'
+                   sh '/var/jenkins_home/bzt petclinic_test_plan.jmx'
+                   sh 'perfReport filterRegex: '', showTrendGraphs: true, sourceDataFiles: ''                    
+        
             }
         }
 
