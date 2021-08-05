@@ -2,6 +2,18 @@
     agent {
         docker { image 'node:14-alpine' }
     }
+
+    environment {
+        AWS_DEFAULT_REGION="us-east-1"
+        AWS_ACCESS_KEY_ID     = credentials('jenkins-aws-secret-key-id')
+        AWS_SECRET_ACCESS_KEY = credentials('jenkins-aws-secret-access-key')
+        def mvnHome = tool name: 'maven-3', type: 'maven'
+        def mvnCMD = "${mvnHome}/bin/mvn"
+        def dockerHome = tool 'docker'
+        PATH = "${dockerHome}/bin:${env.PATH}"
+            
+    }
+
     stages {
         stage('Test') {
             steps {
