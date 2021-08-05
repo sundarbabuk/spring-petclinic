@@ -1,0 +1,84 @@
+pipeline {
+    agent docker
+    environment {
+        AWS_DEFAULT_REGION="us-east-1"
+        AWS_ACCESS_KEY_ID     = credentials('jenkins-aws-secret-key-id')
+        AWS_SECRET_ACCESS_KEY = credentials('jenkins-aws-secret-access-key')
+    //     AWS_ACCESS_KEY_ID=credentials("AWS_ACCESS_KEY_ID")
+    //     AWS_SECRET_ACCESS_KEY=credentials("AWS_SECRET_ACCESS_KEY")
+        // PATH="$PATH:$HOME/dctlenv/bin/"
+        def mvnHome = tool name: 'maven-3', type: 'maven'
+        def mvnCMD = "${mvnHome}/bin/mvn"
+    //     def scannerHome = tool 'sonar'
+    //     JAVA_HOME='${scannerHome}/jdk'
+        def dockerHome = tool 'docker'
+        PATH = "${dockerHome}/bin:${env.PATH}"
+        registry = "sundarbabu/petdemo" 
+        registryCredential = 'dockerhub' 
+        dockerImage = 'sundarbabu/petdemo:v3.0.0'
+        
+     
+    }
+    parameters {
+        choice(
+            choices: ['main' , 'master'],
+            description: '',
+            name: 'BRANCH_NAME')
+    }
+    
+    options {
+        ansiColor('xterm')
+    }
+
+    stages {
+      
+        stage("Build") {
+            steps {
+                sh "${mvnCMD} clean install -DskipTests"
+    //             sh "mvn clean install -DskipTests"
+            }
+        }
+
+        stage("Performance Test") {
+            steps {
+                   sh '/var/jenkins_home/bzt petclinic_test_plan.jmx'
+            //        sh 'perfReport filterRegex: '', showTrendGraphs: true, sourceDataFiles: '''
+                   }                   
+                }
+        
+
+
+        stage("SAST Test") {
+            steps {
+                echo 'Static Application Security Testing under progress...'
+                snykSecurity(
+                snykInstallation: 'snyk',
+                snykTokenId: 'snyk',
+                failOnIssues: 'false'
+          // place other parameters here
+                )
+            }
+        }
+                
+        stage("1-Build Docker Image") {
+            steps {
+                script {
+                    dockerImage = docker.build registry + ":v3.0.0"
+                } 
+            }
+        }
+    
+        stage("Sign & Push Image to Registry") {
+            steps {
+                script {
+                    docker.withTool('docker') {                   
+                        docker.withRegistry( '', 'dockerhub' ) { 
+                            dockerImage.push ()
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
