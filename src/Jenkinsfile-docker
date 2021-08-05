@@ -1,8 +1,5 @@
-    pipeline {
-    agent {
-        docker { image 'node:14-alpine' }
-    }
-
+    // Jenkinsfile
+    
     environment {
         AWS_DEFAULT_REGION="us-east-1"
         AWS_ACCESS_KEY_ID     = credentials('jenkins-aws-secret-key-id')
@@ -12,6 +9,11 @@
         def dockerHome = tool 'docker'
         PATH = "${dockerHome}/bin:${env.PATH}"
             
+    }
+
+      pipeline {
+            agent {
+                docker { image 'node:14-alpine' }
     }
 
     stages {
