@@ -62,7 +62,7 @@ pipeline {
             steps {
                 script {
         //             dockerImage = docker.build registry + ":v3.0.0"
-                    docker.build(devsecopsdemo.jfrog.io/default-docker-local/petdemo + ":v3.0.0")
+                    docker.build(default-docker-local/petdemo + ":v3.0.0")
                 } 
             }
         }
