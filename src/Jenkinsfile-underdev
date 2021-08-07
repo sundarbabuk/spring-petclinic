@@ -18,7 +18,7 @@ pipeline {
         dockerImage = 'sundarbabu/petdemo:v3.0.0'
         def server = Artifactory.server 'artifactory'
         def rtDocker = Artifactory.docker server: server
-        registry = "default-docker-local"
+        def ARTIFACTORY_DOCKER_REGISTRY = "default-docker-local"
         
         
      
@@ -62,7 +62,7 @@ pipeline {
             steps {
                 script {
         //             dockerImage = docker.build registry + ":v3.0.0"
-                    docker.build(default-docker-local/petdemo + ":v3.0.0")
+                    docker.build(ARTIFACTORY_DOCKER_REGISTRY + '/petdemo:v3.0.0')
                 } 
             }
         }
@@ -71,7 +71,7 @@ pipeline {
             steps {
                 rtDockerPush(
                     serverId: "artifactory",
-                    image: devsecopsdemo.jfrog.io/default-docker-local/petdemo + ":v3.0.0",
+                    image: ARTIFACTORY_DOCKER_REGISTRY + '/petdemo:v3.0.0',
                     // Host:
                     // On OSX: "tcp://127.0.0.1:1234"
                     // On Linux can be omitted or null
