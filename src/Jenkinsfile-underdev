@@ -61,8 +61,8 @@ pipeline {
         stage("Build Docker Image") {
             steps {
                 script {
-                    dockerImage = docker.build registry + ":v3.0.0"
-        //             docker.build(devsecopsdemo.jfrog.io/default-docker-local/jenkins + ":v3.0.0")
+        //             dockerImage = docker.build registry + ":v3.0.0"
+                    docker.build(devsecopsdemo.jfrog.io/default-docker-local/petdemo + ":v3.0.0")
                 } 
             }
         }
@@ -71,12 +71,12 @@ pipeline {
             steps {
                 rtDockerPush(
                     serverId: "artifactory",
-                    image: ARTIFACTORY_DOCKER_REGISTRY + '/hello-world:latest',
+                    image: devsecopsdemo.jfrog.io/default-docker-local/petdemo + ":v3.0.0",
                     // Host:
                     // On OSX: "tcp://127.0.0.1:1234"
                     // On Linux can be omitted or null
                     host: HOST_NAME,
-                    targetRepo: 'docker-local',
+                    targetRepo: 'default-docker-local',
                     // Attach custom properties to the published artifacts:
                     properties: 'project-name=docker1;status=stable'
                 )
