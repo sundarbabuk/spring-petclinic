@@ -78,6 +78,12 @@ pipeline {
             }
         }
     
+        stage("E-mail Build Status") {
+            steps {
+                emailext (attachLog: true, body: 'Jenkins Build E-mail Test', subject: 'Jenkins Build E-mail Test', to: 'sundar_babu@hotmail.com')
+            } 
+        }
+        
         
     }
 }
