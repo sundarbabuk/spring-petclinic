@@ -80,7 +80,7 @@ pipeline {
     
         stage("E-mail Build Status") {
             steps {
-                emailext (attachLog: false, body: 'Jenkins Build E-mail Test', subject: 'Jenkins Build E-mail Test', to: 'sundar_babu@hotmail.com')
+                emailext (attachLog: false, body: 'Jenkins Build E-mail Test', subject: 'Jenkins Build E-mail Test', to: 'sundarkbabu@gmail.com')
             } 
         }
         
