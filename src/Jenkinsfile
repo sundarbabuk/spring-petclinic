@@ -19,6 +19,7 @@ pipeline {
         def server = Artifactory.server 'artifactory'
         def rtDocker = Artifactory.docker server: server
         def ARTIFACTORY_DOCKER_REGISTRY = "devsecopsdemo.jfrog.io/default-docker-local"
+        STACKHAWK_API_KEY = credentials("stackhawk-api-key")
     //     DOCKER_CONTENT_TRUST=1
      
     }
@@ -158,8 +159,28 @@ pipeline {
                 )
             }
         }
+
+
+        stage("Deploy Application to Test Env") {
+            steps {
+                sh 'docker run -d -p 8081:8080 sundarbabu/petdemo:v3.0.0'
+            }
+        }
+        
+
+        stage("DAST Test") {
+            steps {
+                sh '''
+                    docker run -v ${WORKSPACE}:/hawk:rw -t \
+                        -e API_KEY=${STACKHAWK_API_KEY} \
+                        -e NO_COLOR=true \
+                        stackhawk/hawkscan
+                '''        
+            }
+        }
+        
     
-        stage("E-mail Build Status") {
+        stage("E-mail CI Status") {
             steps {
                 emailext (attachLog: false, body: 'Jenkins Build E-mail Test', subject: 'Jenkins Build E-mail Test', to: 'sundar_babu@hotmail.com')
             } 

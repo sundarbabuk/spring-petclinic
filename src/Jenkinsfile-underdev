@@ -59,7 +59,7 @@ pipeline {
         }
 
 
-        stage("Deploy Application to Staging") {
+        stage("Deploy Application to Test Env") {
             steps {
                 sh 'docker run -d -p 8081:8080 sundarbabu/petdemo:v3.0.0'
             }
