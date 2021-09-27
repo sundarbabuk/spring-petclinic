@@ -164,14 +164,14 @@ pipeline {
         stage("Test Automation") {
             failFast true
             parallel {
-        stage("Deploy App -Test Env") {
+        stage("1-Deploy App -Test Env") {
             steps {
                 sh 'docker run -d -p 8081:8080 sundarbabu/petdemo:v3.0.0'
             }
         }
         
 
-        stage("DAST Test") {
+        stage("2-DAST Test") {
             steps {
                 sh '''
                     docker run -v ${WORKSPACE}:/hawk:rw -t \
