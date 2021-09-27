@@ -143,6 +143,24 @@ pipeline {
                 }
             }
         }
+
+        stage ('Push image to Artifactory') {
+            steps {
+                rtDockerPush(
+                    serverId: "artifactory",
+                    image: ARTIFACTORY_DOCKER_REGISTRY + '/petdemo:v3.0.0',
+                    targetRepo: 'default-docker-local',
+                    // Attach custom properties to the published artifacts:
+                    properties: 'project-name=docker1;status=stable'
+                )
+            }
+        }
+    
+        stage("E-mail Build Status") {
+            steps {
+                emailext (attachLog: false, body: 'Jenkins Build E-mail Test', subject: 'Jenkins Build E-mail Test', to: 'sundar_babu@hotmail.com')
+            } 
+        }
     }   
 }      
         
