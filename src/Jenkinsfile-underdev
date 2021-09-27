@@ -19,7 +19,7 @@ pipeline {
         def server = Artifactory.server 'artifactory'
         def rtDocker = Artifactory.docker server: server
         def ARTIFACTORY_DOCKER_REGISTRY = "devsecopsdemo.jfrog.io/default-docker-local"
-        
+        STACKHAWK_API_KEY = credentials("stackhawk-api-key")
         
      
     }
@@ -57,6 +57,19 @@ pipeline {
                 )
             }
         }
+
+
+        stage("DAST Test") {
+            steps {
+                sh '''
+                    docker run -v ${WORKSPACE}:/hawk:rw -t \
+                        -e API_KEY=${STACKHAWK_API_KEY} \
+                        -e NO_COLOR=true \
+                        stackhawk/hawkscan
+                '''        
+            }
+        }
+
                 
         stage("Build Docker Image") {
             steps {
