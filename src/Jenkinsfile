@@ -68,7 +68,7 @@ pipeline {
 
         stage("Code Quality Gate") {
             steps {
-              sleep(60)
+              sleep(30)
                 waitForQualityGate abortPipeline: true
                 }
             }
@@ -159,9 +159,12 @@ pipeline {
                 )
             }
         }
+        
 
-
-        stage("Deploy Application to Test Env") {
+        stage("Test Automation") {
+            failFast true
+            parallel {
+        stage("Deploy App -Test Env") {
             steps {
                 sh 'docker run -d -p 8081:8080 sundarbabu/petdemo:v3.0.0'
             }
@@ -175,7 +178,9 @@ pipeline {
                         -e API_KEY=${STACKHAWK_API_KEY} \
                         -e NO_COLOR=true \
                         stackhawk/hawkscan
-                '''        
+                ''' 
+                    }
+                }       
             }
         }
         
