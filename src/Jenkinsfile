@@ -16,6 +16,9 @@ pipeline {
         registry = "sundarbabu/petdemo" 
         registryCredential = 'dockerhub' 
         dockerImage = 'sundarbabu/petdemo:v3.0.0'
+        def server = Artifactory.server 'artifactory'
+        def rtDocker = Artifactory.docker server: server
+        def ARTIFACTORY_DOCKER_REGISTRY = "devsecopsdemo.jfrog.io/default-docker-local"
     //     DOCKER_CONTENT_TRUST=1
      
     }
