@@ -203,31 +203,37 @@ pipeline {
                     }
                 }
 
-                stage("12-API Security Test") {
+                stage("12-RASP Test") {
                     steps {
                         echo "Completed Successfully"
                     }
                 }
 
-                stage("13-Service Virtualization Test") {
+                stage("13-API Security Test") {
                     steps {
                         echo "Completed Successfully"
                     }
                 }
 
-                stage("14-Regression Test") {
+                stage("14-Service Virtualization Test") {
                     steps {
                         echo "Completed Successfully"
                     }
                 }
 
-                stage("15-Generate SBOM") {
+                stage("15-Regression Test") {
                     steps {
                         echo "Completed Successfully"
                     }
                 }
 
-                stage("16-Destroy Dev Environment") {
+                stage("16-Generate SBOM") {
+                    steps {
+                        echo "Completed Successfully"
+                    }
+                }
+
+                stage("17-Destroy Dev Environment") {
                     steps {
                         echo "Completed Successfully"
                     }
