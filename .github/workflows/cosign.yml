@@ -15,9 +15,10 @@ jobs:
       - name: Generate provenance
         uses: slsa-framework/github-actions-demo@v0.1
         with:
-          artifact_path: artifact/
+          artifact_path: none
 
       - name: Upload provenance
         uses: actions/upload-artifact@v2
         with:
+          name: my-artifact
           path: build.provenance
