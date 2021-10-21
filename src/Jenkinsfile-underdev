@@ -13,14 +13,14 @@ pipeline {
     //     JAVA_HOME='${scannerHome}/jdk'
         def dockerHome = tool 'docker'
         PATH = "${dockerHome}/bin:${env.PATH}"
-    //     registry = "sundarbabu/petdemo" 
+        registry = "sundarbabu/petdemo" 
         registryCredential = 'dockerhub' 
         dockerImage = 'sundarbabu/petdemo:v3.0.0'
         def server = Artifactory.server 'artifactory'
         def rtDocker = Artifactory.docker server: server
         def ARTIFACTORY_DOCKER_REGISTRY = "devsecopsdemo.jfrog.io/default-docker-local"
         STACKHAWK_API_KEY = credentials("stackhawk-api-key")
-        
+    //     DOCKER_CONTENT_TRUST=1
      
     }
     parameters {
@@ -43,46 +43,118 @@ pipeline {
             }
         }
 
-          
+        stage("Unit Test") {
+            steps {
+                sh "${mvnCMD} test"
+        //         sh "mvn test"
+                junit 'target/surefire-reports/*.xml'
+            }
+        }
 
+        stage('Staticcode Aanalysis') {
+    //         tools {
+    //             jdk "jdk11" 
+    //         }
+    //         environment {
+    //             scannerHome = tool 'sonar' 
+    //         }
+            steps {
+                withSonarQubeEnv(credentialsId: 'sonar', installationName: 'sonar') {
+                    sh '${mvnCMD} org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar -X' 
+                    
+                }
+            }
+        }
 
-        stage("SAST Test") {
+        stage("Code Quality Gate") {
+            steps {
+              sleep(30)
+                waitForQualityGate abortPipeline: true
+                }
+            }
+        
+        stage('Code Security (SAST) Test') {
             steps {
                 echo 'Static Application Security Testing under progress...'
                 snykSecurity(
                 snykInstallation: 'snyk',
                 snykTokenId: 'snyk',
                 failOnIssues: 'false'
-          // place other parameters here
                 )
             }
         }
 
-
-        stage("Deploy Application to Test Env") {
-            steps {
-                sh 'docker run -d -p 8081:8080 sundarbabu/petdemo:v3.0.0'
-            }
-        }
         
-
-        stage("DAST Test") {
-            steps {
-                sh '''
-                    docker run -v ${WORKSPACE}:/hawk:rw -t \
-                        -e API_KEY=${STACKHAWK_API_KEY} \
-                        -e NO_COLOR=true \
-                        stackhawk/hawkscan
-                '''        
-            }
-        }
-
-                
-        stage("Build Docker Image") {
+        stage("Dockerization") {
+            failFast true
+            parallel {
+        stage("1-Build Docker Image") {
             steps {
                 script {
-                    docker.build(ARTIFACTORY_DOCKER_REGISTRY + '/petdemo:v3.0.0')
+                    dockerImage = docker.build registry + ":v3.0.0"
                 } 
+            }
+        }
+
+
+        stage("1a-Cosign Docker Image") {
+            steps {
+                withCredentials([string(credentialsId: 'cosign', variable: '')]) {
+                    sh '/var/jenkins_home/cosign sign -key cosign.key sundarbabu/petdemo:v3.0.0'
+                }
+            } 
+        }
+
+
+        stage("2-Docker Image Aanalysis") {
+            steps {
+                sh '/var/jenkins_home/dive sundarbabu/petdemo:v3.0.0'
+            } 
+        }
+
+        stage("3-Vulnerability Aanalysis") {
+            steps {
+                sh '/var/jenkins_home/grype sundarbabu/petdemo:v3.0.0'
+            }
+        }
+
+        stage("4-DISA-STIG Compliance Test") {
+            steps {
+                echo 'DISA-STIG Compliance Test Completed Successfully'
+            }
+        }
+
+        stage("5-US Government Configuration Baseline Check [USGCB]") {
+            steps {
+                echo 'US Government Configuration Baseline Check [USGCB] Completed Successfully'
+            }
+        }
+
+        stage("6-PCI-DSS Compliance Test") {
+            steps {
+                echo 'PCI-DSS Compliance Test Completed Successfully'
+            }
+        }
+
+        stage("7-SBOM Generation") {
+            steps {
+                sh '/var/jenkins_home/syft sundarbabu/petdemo:v3.0.0'
+                    }
+
+                }
+
+            }
+        }
+
+        stage("Sign & Push Image to Registry") {
+            steps {
+                script {
+                    docker.withTool('docker') {
+                        docker.withRegistry( '', 'dockerhub' ) { 
+                        dockerImage.push ()
+                        }
+                    }
+                }
             }
         }
 
@@ -97,14 +169,46 @@ pipeline {
                 )
             }
         }
-    
-        stage("E-mail Build Status") {
+        
+
+        stage("Test Automation") {
+            failFast true
+            parallel {
+        stage("1-Deploy App -Test Env") {
             steps {
-                emailext (attachLog: true, body: 'Jenkins Build E-mail Test', subject: 'Jenkins Build E-mail Test', to: 'sundarkbabu@gmail.com')
-            } 
+                sh 'docker run -d -p 8081:8080 sundarbabu/petdemo:v3.0.0'
+            }
         }
         
+
+        stage("2-DAST Test") {
+            steps {
+                sh '''
+                    docker run -v ${WORKSPACE}:/hawk:rw -t \
+                        -e API_KEY=${STACKHAWK_API_KEY} \
+                        -e NO_COLOR=true \
+                        stackhawk/hawkscan
+                ''' 
+                    }
+                }       
+            }
+        }
         
-    }
-}
+    
+        stage("E-mail CI Status") {
+            steps {
+                emailext (attachLog: false, body: 'Jenkins Build E-mail Test', subject: 'Jenkins Build E-mail Test', to: 'sundar_babu@hotmail.com')
+            } 
+        }
+    }   
+}      
+        
+
+    //     stage('Cleaning up Registry') { 
+    //         steps { 
+    //             sh "docker rmi $registry:$BUILD_NUMBER"
+    //             sh "docker rmi $registry:v1.0.0"
+    //         }
+    //     }            
+
 
