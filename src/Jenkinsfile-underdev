@@ -44,18 +44,7 @@ pipeline {
         }
 
                
-        stage('Code Security (SAST) Test') {
-            steps {
-                echo 'Static Application Security Testing under progress...'
-                snykSecurity(
-                snykInstallation: 'snyk',
-                snykTokenId: 'snyk',
-                failOnIssues: 'false'
-                )
-            }
-        }
-
-        
+                
         stage("Dockerization") {
             failFast true
             parallel {
@@ -70,7 +59,7 @@ pipeline {
 
         stage("1a-Cosign Docker Image") {
             steps {
-                withCredentials([string(credentialsId: 'cosign', variable: '')]) {
+                withCredentials([string(credentialsId: 'cosign', variable: 'Enter password for private key:')]) {
                     sh '/var/jenkins_home/cosign sign -key /var/jenkins_home/cosign.key sundarbabu/petdemo:v3.0.0'
                 }
             } 
