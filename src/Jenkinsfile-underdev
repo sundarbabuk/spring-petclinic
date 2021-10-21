@@ -20,6 +20,7 @@ pipeline {
         def rtDocker = Artifactory.docker server: server
         def ARTIFACTORY_DOCKER_REGISTRY = "devsecopsdemo.jfrog.io/default-docker-local"
         STACKHAWK_API_KEY = credentials("stackhawk-api-key")
+        COSIGN_CREDS = credentials('cosign')
     //     DOCKER_CONTENT_TRUST=1
      
     }
@@ -59,11 +60,11 @@ pipeline {
 
         stage("1a-Cosign Docker Image") {
             steps {
-                withCredentials([string(credentialsId: 'cosign', variable: 'Enter password for private key:')]) {
-                    sh '/var/jenkins_home/cosign sign -key /var/jenkins_home/cosign.key sundarbabu/petdemo:v3.0.0'
-                }
-            } 
-        }
+                sh '/var/jenkins_home/cosign sign -key /var/jenkins_home/cosign.key sundarbabu/petdemo:v3.0.0'
+                sh 'echo $COSIGN_CREDS'    
+            }
+        } 
+        
 
 
         stage("2-Docker Image Aanalysis") {
