@@ -6,7 +6,7 @@ on:
 jobs:
   
   generate-provenance:
-    needs: build
+    
     name: Generate build provenance
     runs-on: ubuntu-latest
     steps:
