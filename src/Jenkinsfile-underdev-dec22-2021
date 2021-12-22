@@ -55,9 +55,9 @@ pipeline {
             }
         }
 
-        stage("3-Vulnerability Aanalysis") {
+        stage("Trivy Vulnerability Scan") {
             steps {
-                sh '/var/jenkins_home/grype sundarbabu/petdemo:v3.0.0'
+                sh '/var/jenkins_home/trivy --no-progress --exit-code 1 --severity MEDIUM,HIGH,CRITICAL sundarbabu/petdemo:v3.0.0'
                     }
                 }
             }
