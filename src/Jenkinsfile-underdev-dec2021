@@ -92,6 +92,7 @@ pipeline {
     //             sh 'docker system prune -a --force'
     //         }
     //     }
+    }
 
         stage("Dockerization") {
             failFast true
@@ -141,8 +142,8 @@ pipeline {
 
     ///            }
 
-    ///        }
-    ///    }
+            }
+        }
 
         stage('login to GHCR') {
             steps {
@@ -220,4 +221,5 @@ pipeline {
         }
     }   
 }      
-}            
+}
+           
