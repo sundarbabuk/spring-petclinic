@@ -61,12 +61,12 @@ pipeline {
             }
         }
 
-        stage("Trivy Vulnerability Scan") {
-            steps {
+    ///     stage("Trivy Vulnerability Scan") {
+    ///         steps {
     //             sh '/var/jenkins_home/trivy --no-progress --exit-code 1 --severity MEDIUM,HIGH,CRITICAL sundarbabu/petdemo:v3.0.0'
-                sh '/var/jenkins_home/trivy sundarbabu/petdemo:v3.0.0'
-                    }
-                }
+    ///             sh '/var/jenkins_home/trivy sundarbabu/petdemo:v3.0.0'
+    ///                 }
+    ///             }
             }
         }
 
