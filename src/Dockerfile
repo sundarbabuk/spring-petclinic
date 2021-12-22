@@ -14,3 +14,5 @@ RUN ./mvnw dependency:go-offline
 COPY src ./src
 
 CMD ["./mvnw", "spring-boot:run"]
+
+LABEL org.opencontainers.image.source https://github.com/sundarbabuk/spring-petclinic
