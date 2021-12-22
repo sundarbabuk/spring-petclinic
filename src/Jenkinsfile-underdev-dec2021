@@ -54,38 +54,38 @@ pipeline {
             }
         }
 
-        stage('Staticcode Aanalysis') {
+    ///    stage('Staticcode Aanalysis') {
     //         tools {
     //             jdk "jdk11" 
     //         }
     //         environment {
     //             scannerHome = tool 'sonar' 
     //         }
-            steps {
-                withSonarQubeEnv(credentialsId: 'sonar', installationName: 'sonar') {
-                    sh '${mvnCMD} org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar -X' 
+    ///        steps {
+    ///            withSonarQubeEnv(credentialsId: 'sonar', installationName: 'sonar') {
+    ///                sh '${mvnCMD} org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar -X' 
                     
-                }
-            }
-        }
+    ///            }
+    ///        }
+    ///    }
 
-        stage("Code Quality Gate") {
-            steps {
-              sleep(30)
-                waitForQualityGate abortPipeline: true
-                }
-            }
+    ///    stage("Code Quality Gate") {
+    ///        steps {
+    ///          sleep(30)
+    ///            waitForQualityGate abortPipeline: true
+    ///            }
+    ///        }
         
-        stage('Code Security (SAST) Test') {
-            steps {
-                echo 'Static Application Security Testing under progress...'
-                snykSecurity(
-                snykInstallation: 'snyk',
-                snykTokenId: 'snyk',
-                failOnIssues: 'false'
-                )
-            }
-        }
+    ///    stage('Code Security (SAST) Test') {
+    ///        steps {
+    ///            echo 'Static Application Security Testing under progress...'
+    ///            snykSecurity(
+    ///            snykInstallation: 'snyk',
+    ///            snykTokenId: 'snyk',
+    ///            failOnIssues: 'false'
+    ///            )
+    ///        }
+    ///    }
 
     //     stage('cleanup') {
     //         steps {
@@ -104,17 +104,17 @@ pipeline {
             }
         }
 
-        stage("2-Docker Image Aanalysis") {
-            steps {
-                sh '/var/jenkins_home/dive sundarbabu/petdemo:v3.0.0'
-            } 
-        }
+    ///    stage("2-Docker Image Aanalysis") {
+    ///        steps {
+    ///            sh '/var/jenkins_home/dive sundarbabu/petdemo:v3.0.0'
+    ///        } 
+    ///    }
 
-        stage("3-Vulnerability Aanalysis") {
-            steps {
-                sh '/var/jenkins_home/grype sundarbabu/petdemo:v3.0.0'
-            }
-        }
+    ///    stage("3-Vulnerability Aanalysis") {
+    ///        steps {
+    ///            sh '/var/jenkins_home/grype sundarbabu/petdemo:v3.0.0'
+    ///        }
+    ///    }
 
         stage("4-DISA-STIG Compliance Test") {
             steps {
@@ -134,19 +134,19 @@ pipeline {
             }
         }
 
-        stage("7-SBOM Generation") {
-            steps {
-                sh '/var/jenkins_home/syft sundarbabu/petdemo:v3.0.0'
-                    }
+    ///    stage("7-SBOM Generation") {
+    ///        steps {
+    ///            sh '/var/jenkins_home/syft sundarbabu/petdemo:v3.0.0'
+    ///                }
 
-                }
+    ///            }
 
-            }
-        }
+    ///        }
+    ///    }
 
         stage('login to GHCR') {
             steps {
-                sh 'echo $GITHUB_TOKEN_PSW | docker login ghcr.io -u $GITHUB_TOKEN_USR --password-stdin'
+                sh 'echo $GITHUB_TOKEN_PSW | docker login ghcr.io -u $GITHUB_TOKEN_USR -p --password-stdin'
             }
         }
 
@@ -189,28 +189,28 @@ pipeline {
         }
         
 
-        stage("Test Automation") {
-            failFast true
-            parallel {
-        stage("1-Deploy App -Test Env") {
-            steps {
-                sh 'docker run -d -p 8081:8080 sundarbabu/petdemo:v3.0.0'
-            }
-        }
+    ///    stage("Test Automation") {
+    ///        failFast true
+    ///        parallel {
+    ///    stage("1-Deploy App -Test Env") {
+    ///        steps {
+    ///            sh 'docker run -d -p 8081:8080 sundarbabu/petdemo:v3.0.0'
+    ///        }
+    ///    }
         
 
-        stage("2-DAST Test") {
-            steps {
-                sh '''
-                    docker run -v ${WORKSPACE}:/hawk:rw -t \
-                        -e API_KEY=${STACKHAWK_API_KEY} \
-                        -e NO_COLOR=true \
-                        stackhawk/hawkscan
-                ''' 
-                    }
-                }       
-            }
-        }
+    ///    stage("2-DAST Test") {
+    ///        steps {
+    ///            sh '''
+    ///                docker run -v ${WORKSPACE}:/hawk:rw -t \
+    ///                    -e API_KEY=${STACKHAWK_API_KEY} \
+    ///                    -e NO_COLOR=true \
+    ///                    stackhawk/hawkscan
+    ///            ''' 
+    ///                }
+    ///            }       
+    ///        }
+    ///    }
         
     
         stage("E-mail CI Status") {
