@@ -55,9 +55,8 @@ pipeline {
             parallel {
         stage("1-Build Docker Image") {
             steps {
-                sh 'docker build -t $IMAGE_NAME:$IMAGE_VERSION .'
-    ///             script {
-    ///                 dockerImage = docker.build registry + ":v3.0.0"
+                script {
+                    dockerImage = docker.build registry + ":v3.0.0"
                 } 
             }
         }
@@ -84,7 +83,7 @@ pipeline {
                     docker.withTool('docker') {
                         docker.withRegistry( '', 'dockerhub' ) { 
                         sh '/var/jenkins_home/cosign version'
-                        sh '/var/jenkins_home/cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_NAME:$IMAGE_VERSION .'
+                        sh '/var/jenkins_home/cosign sign --key $COSIGN_PRIVATE_KEY sundarbabu/petdemo:v3.0.0'
                             dockerImage.push ()
     ///                     sh '/var/jenkins_home/cosign verify --key $COSIGN_PUBLIC_KEY sundarbabu/petdemo:v3.0.0'
                         }
@@ -112,7 +111,7 @@ pipeline {
             } 
         }
     }   
-// }      
+}      
         
 
     //     stage('Cleaning up Registry') { 
