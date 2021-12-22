@@ -56,7 +56,8 @@ pipeline {
 
     stage('login to GHCR') {
       steps {
-        sh 'echo $GITHUB_TOKEN_PASWD | docker login ghcr.io -u USERNAME --password-stdin'
+  ///       sh 'echo $GITHUB_TOKEN_PASWD | docker login ghcr.io -u USERNAME --password-stdin'
+        sh 'docker login ghcr.io -u USERNAME -p $(GITHUB_TOKEN_PASWD)'
       }
     }
 
