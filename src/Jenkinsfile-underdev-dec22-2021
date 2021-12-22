@@ -55,9 +55,10 @@ pipeline {
             parallel {
         stage("1-Build Docker Image") {
             steps {
-                script {
-                    dockerImage = docker.build registry + ":v3.0.0"
-                } 
+                sh 'docker build -t $IMAGE_NAME:$IMAGE_VERSION .'
+    ///             script {
+    ///                 dockerImage = docker.build registry + ":v3.0.0"
+    ///             } 
             }
         }
 
