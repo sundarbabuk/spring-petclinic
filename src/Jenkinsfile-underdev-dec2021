@@ -87,11 +87,11 @@ pipeline {
             }
         }
 
-        stage('cleanup') {
-            steps {
-                sh 'docker system prune -a --force'
-            }
-        }
+    //     stage('cleanup') {
+    //         steps {
+    //             sh 'docker system prune -a --force'
+    //         }
+    //     }
 
         stage("Dockerization") {
             failFast true
