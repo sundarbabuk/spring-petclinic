@@ -21,9 +21,11 @@ pipeline {
         def ARTIFACTORY_DOCKER_REGISTRY = "devsecopsdemo.jfrog.io/default-docker-local"
         STACKHAWK_API_KEY = credentials("stackhawk-api-key")
     //     DOCKER_CONTENT_TRUST=1
-        GITHUB_TOKEN_PSW = credentials('ghcr-token')
+        GITHUB_TOKEN=credentials('ghcr-token')
         IMAGE_NAME='sundarbabuk/spring-petclinic'
         IMAGE_VERSION='1.0-001'
+        COSIGN_PASSWORD=credentials('cosign-password')
+        COSIGN_PRIVATE_KEY=credentials('cosign-private-key')
      
     }
     parameters {
@@ -67,12 +69,12 @@ pipeline {
             }
         }
 
-        stage('Login to GHCR') {
-            steps {
-                sh 'echo $AWS_ACCESS_KEY_ID'
-                sh 'echo $GITHUB_TOKEN_PSW | docker login ghcr.io -u USERNAME --password-stdin'
-            }
-        }
+    ///    stage('Login to GHCR') {
+    ///        steps {
+    ///            sh 'echo $GITHUB_TOKEN_PSW | docker login ghcr.io -u USERNAME --password-stdin'
+    ///        }
+    ///    }
+
 
         stage("Sign & Push Image to Registry") {
             steps {
@@ -83,6 +85,13 @@ pipeline {
                         }
                     }
                 }
+            }
+        }
+
+        stage('sign the container image') {
+            steps {
+                sh 'cosign version'
+                sh 'cosign sign --key $COSIGN_PRIVATE_KEY docker.build registry + ":v3.0.0"'
             }
         }
 
