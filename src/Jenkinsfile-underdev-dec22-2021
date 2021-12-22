@@ -90,8 +90,8 @@ pipeline {
 
         stage('sign the container image') {
             steps {
-                sh 'cosign version'
-                sh 'cosign sign --key $COSIGN_PRIVATE_KEY docker.build registry + ":v3.0.0"'
+                sh '/var/jenkins_home/cosign version'
+                sh '/var/jenkins_home/cosign sign --key $COSIGN_PRIVATE_KEY docker.build registry + ":v3.0.0"'
             }
         }
 
