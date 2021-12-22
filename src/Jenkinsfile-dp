@@ -20,7 +20,7 @@ pipeline {
         def rtDocker = Artifactory.docker server: server
         def ARTIFACTORY_DOCKER_REGISTRY = "devsecopsdemo.jfrog.io/default-docker-local"
         STACKHAWK_API_KEY = credentials("stackhawk-api-key")
-        GITHUB_TOKEN_USR=sundarbabu
+        GITHUB_TOKEN_USR='sundarbabu'
         GITHUB_TOKEN_PASWD = credentials('ghcr-token')
         IMAGE_NAME='sundarbabuk/spring-petclinic'
         IMAGE_VERSION='1.0-001'
