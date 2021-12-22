@@ -112,7 +112,7 @@ pipeline {
             } 
         }
     }   
-}      
+// }      
         
 
     //     stage('Cleaning up Registry') { 
