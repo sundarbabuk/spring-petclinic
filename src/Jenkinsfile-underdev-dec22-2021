@@ -96,6 +96,7 @@ pipeline {
                         docker.withRegistry( '', 'dockerhub' ) {
                             sh '/var/jenkins_home/syft sundarbabu/petdemo:v3.0.0 -o json > ./sbom.syft.json'
                             sh '/var/jenkins_home/cosign attest -predicate ./sbom.syft.json --key $COSIGN_PRIVATE_KEY sundarbabu/petdemo:v3.0.0'
+                            sh '/var/jenkins_home/cosign verify-attestation --key $COSIGN_PUBLIC_KEY sundarbabu/petdemo:v3.0.0'
                         }
                     }
                 }
