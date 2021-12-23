@@ -55,11 +55,9 @@ pipeline {
             parallel {
         stage("1-Build Docker Image") {
             steps {
-                sh 'docker build -t $IMAGE_NAME:$IMAGE_VERSION .'
-                sh 'docker tag $IMAGE_NAME:$IMAGE_VERSION $IMAGE_NAME:v1'
-    ///             script {
-    ///                 dockerImage = docker.build registry + ":v3.0.0"
-    ///             } 
+                script {
+                    dockerImage = docker.build registry + ":v3.0.0"
+                } 
             }
         }
 
@@ -91,6 +89,7 @@ pipeline {
             }
         }
 
+
         stage("Cosign Image") {
             steps {
                 sh '/var/jenkins_home/cosign version'
@@ -99,7 +98,7 @@ pipeline {
                 }
         }
 
-        
+
         stage ('Push image to Artifactory') {
             steps {
                 rtDockerPush(
