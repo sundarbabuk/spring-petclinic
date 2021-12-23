@@ -61,7 +61,7 @@ pipeline {
   ///       sh 'echo $GITHUB_TOKEN_PSW | docker login ghcr.io -u $GITHUB_TOKEN_USR -p "$GITHUB_TOKEN_PSW"'
         sh 'echo $DOCKERHUB_USR'
         sh 'echo $DOCKERHUB_PASWD'
-        sh 'docker login -u $DOCKERHUB_USR -p $DOCKERHUB_PASWD'
+        sh 'docker login -u $DOCKERHUB_USR -p ${DOCKERHUB_PASWD}'
       }
     }
 
