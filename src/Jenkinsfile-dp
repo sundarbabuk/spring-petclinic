@@ -71,14 +71,15 @@ pipeline {
       steps {
         sh 'docker push ghcr.io/$IMAGE_NAME:$IMAGE_VERSION'
       }
+    }
 
     stage("7-SBOM Generation") {
-        steps {
-            sh '/var/jenkins_home/syft sundarbabuk/spring-petclinic:1.0-001'
-                    }
+      steps {
+        sh '/var/jenkins_home/syft sundarbabuk/spring-petclinic:1.0-001 -o json > ./sbom.syft.json'
+  ///       sh '/var/jenkins_home/cosign attest -predicate ./sbom.syft.json -key ./cosign.key "$IMAGE"'
+          }
 
-                }
-    }
+      }
   }
 
   post {
