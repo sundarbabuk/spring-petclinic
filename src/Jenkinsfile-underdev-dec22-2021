@@ -89,6 +89,13 @@ pipeline {
             }
         }
 
+        stage("SBOM Generation") {
+            steps {
+                sh '/var/jenkins_home/syft sundarbabu/petdemo:v3.0.0'
+                    }
+
+                }
+                
 
         stage("Cosign Image") {
             steps {
