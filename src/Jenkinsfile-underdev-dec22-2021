@@ -42,12 +42,12 @@ pipeline {
 
     stages {
       
-        stage("Build") {
-            steps {
-                sh "${mvnCMD} clean install -DskipTests"
+    ///     stage("Build") {
+    ///         steps {
+    ///             sh "${mvnCMD} clean install -DskipTests"
     //             sh "mvn clean install -DskipTests"
-            }
-        }
+    ///         }
+    ///     }
 
            
         stage("Dockerization") {
