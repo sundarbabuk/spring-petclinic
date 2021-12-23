@@ -25,7 +25,7 @@ pipeline {
         IMAGE_NAME='sundarbabuk/spring-petclinic'
         IMAGE_VERSION='1.0-001'
         DOCKERHUB_USR='sundarbabu'
-        DOCKERHUB_PASWD = credentials('dockerhub')
+        DOCKERHUB_PASWD = credentials('dockerhublogin')
   }
   
   parameters {
