@@ -20,7 +20,7 @@ pipeline {
         def rtDocker = Artifactory.docker server: server
         def ARTIFACTORY_DOCKER_REGISTRY = "devsecopsdemo.jfrog.io/default-docker-local"
         STACKHAWK_API_KEY = credentials("stackhawk-api-key")
-        GITHUB_TOKEN_USR='sundarbabu'
+        GITHUB_TOKEN_USR='sundar_babu@hotmail.com'
         GITHUB_TOKEN=credentials('ghcr-token')
         IMAGE_NAME='sundarbabuk/spring-petclinic'
         IMAGE_VERSION='1.0-001'
@@ -56,7 +56,7 @@ pipeline {
 
     stage('login to GHCR') {
       steps {
-        sh 'echo $GITHUB_TOKEN_PSW | docker login ghcr.io -u USERNAME -p "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"'
+        sh 'echo $GITHUB_TOKEN_PSW | docker login ghcr.io -u $GITHUB_TOKEN_USR -p "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"'
   ///       sh 'docker login ghcr.io -u $GITHUB_TOKEN_USR -p "$GITHUB_TOKEN_PASWD"'
       }
     }
@@ -71,6 +71,13 @@ pipeline {
       steps {
         sh 'docker push ghcr.io/$IMAGE_NAME:$IMAGE_VERSION'
       }
+
+    stage("7-SBOM Generation") {
+        steps {
+            sh '/var/jenkins_home/syft sundarbabuk/spring-petclinic:1.0-001'
+                    }
+
+                }
     }
   }
 
