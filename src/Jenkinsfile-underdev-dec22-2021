@@ -95,7 +95,7 @@ pipeline {
                     docker.withTool('docker') {
                         docker.withRegistry( '', 'dockerhub' ) {
                             sh '/var/jenkins_home/syft sundarbabu/petdemo:v3.0.0 -o json > ./sbom.syft.json'
-                            sh '/var/jenkins_home/cosign attest -predicate ./sbom.syft.json --key $COSIGN_PRIVATE_KEY'
+                            sh '/var/jenkins_home/cosign attest -predicate ./sbom.syft.json --key $COSIGN_PRIVATE_KEY sundarbabu/petdemo:v3.0.0'
                         }
                     }
                 }
@@ -109,7 +109,7 @@ pipeline {
                     docker.withTool('docker') {
                         docker.withRegistry( '', 'dockerhub' ) {
                             sh '/var/jenkins_home/grype sbom:/tmp/sbom.syft.json -o json > ./vulnerability-report.grype.json'
-                            sh '/var/jenkins_home/cosign attest -predicate ./vulnerability-report.grype.json --key $COSIGN_PRIVATE_KEY'
+                            sh '/var/jenkins_home/cosign attest -predicate ./vulnerability-report.grype.json --key $COSIGN_PRIVATE_KEY sundarbabu/petdemo:v3.0.0'
                             
                         }
                     }
