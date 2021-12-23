@@ -94,13 +94,29 @@ pipeline {
                 script {
                     docker.withTool('docker') {
                         docker.withRegistry( '', 'dockerhub' ) {
-                            sh '/var/jenkins_home/syft sundarbabu/petdemo:v3.0.0 -o json > ./sbom.syft.json'
-                            sh '/var/jenkins_home/cosign attest -predicate ./sbom.syft.json --key $COSIGN_PRIVATE_KEY sundarbabu/petdemo:v3.0.0'
+                            sh '/var/jenkins_home/syft sundarbabu/petdemo:v3.0.0 -o json > /tmp/sbom.syft.json'
+                            sh '/var/jenkins_home/cosign attest -predicate /tmp/sbom.syft.json --key $COSIGN_PRIVATE_KEY'
                         }
                     }
                 }
             }
         }
+
+
+        stage("Vulnerabilty Scan & Attestation") {
+            steps {
+                script {
+                    docker.withTool('docker') {
+                        docker.withRegistry( '', 'dockerhub' ) {
+                            sh '/var/jenkins_home/grype sbom:/tmp/sbom.syft.json -o json > /tmp/vulnerability-report.grype.json'
+                            sh '/var/jenkins_home/cosign attest -predicate /tmp/vulnerability-report.grype.json --key $COSIGN_PRIVATE_KEY'
+                            
+                        }
+                    }
+                }
+            }
+        }
+
 
         stage("Sign Image & Validate") {
             steps {
