@@ -51,6 +51,7 @@ pipeline {
 
         stage("Build") {
             steps {
+                sh "${mvnCMD} spring-javaformat:apply"
                 sh "${mvnCMD} --batch-mode clean clover:setup clover:optimize test clover:aggregate clover:clover clover:snapshot -s mvn-settings.xml"
         step([
           $class: 'CloverPublisher',
