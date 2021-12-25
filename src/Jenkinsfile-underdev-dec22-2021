@@ -49,6 +49,20 @@ pipeline {
     ///         }
     ///     }
 
+        stage("Build") {
+            steps {
+                sh "${mvnCMD} --batch-mode clean clover:setup clover:optimize test clover:aggregate clover:clover clover:snapshot -s mvn-settings.xml"
+        step([
+          $class: 'CloverPublisher',
+          cloverReportDir: 'target/site',
+          cloverReportFileName: 'clover.xml',
+          healthyTarget: [methodCoverage: 70, conditionalCoverage: 80, statementCoverage: 80], // optional, default is: method=70, conditional=80, statement=80
+          unhealthyTarget: [methodCoverage: 50, conditionalCoverage: 50, statementCoverage: 50], // optional, default is none
+          failingTarget: [methodCoverage: 0, conditionalCoverage: 0, statementCoverage: 0]     // optional, default is none
+        ])
+      }
+    }
+
            
         stage("Dockerization") {
             failFast true
@@ -97,6 +111,7 @@ pipeline {
                             sh '/var/jenkins_home/syft sundarbabu/petdemo:v3.0.0 -o json > ./sbom.syft.json'
                             sh '/var/jenkins_home/cosign attest -predicate ./sbom.syft.json --key $COSIGN_PRIVATE_KEY sundarbabu/petdemo:v3.0.0'
                             sh '/var/jenkins_home/cosign verify-attestation --key $COSIGN_PUBLIC_KEY sundarbabu/petdemo:v3.0.0'
+                            sh 'rm /var/jenkins_home/workspace/Springboot-App/sbom.syft.json'
                         }
                     }
                 }
@@ -111,6 +126,7 @@ pipeline {
                         docker.withRegistry( '', 'dockerhub' ) {
                             sh '/var/jenkins_home/grype sbom:/tmp/sbom.syft.json -o json > ./vulnerability-report.grype.json'
                             sh '/var/jenkins_home/cosign attest -predicate ./vulnerability-report.grype.json --key $COSIGN_PRIVATE_KEY sundarbabu/petdemo:v3.0.0'
+                            sh 'rm /var/jenkins_home/workspace/Springboot-App/vulnerability-report.grype.json'
                             
                         }
                     }
@@ -126,7 +142,7 @@ pipeline {
                         docker.withRegistry( '', 'dockerhub' ) {
                             sh '/var/jenkins_home/cosign version'
                             sh '/var/jenkins_home/cosign sign --key $COSIGN_PRIVATE_KEY sundarbabu/petdemo:v3.0.0'
-                            sh '/var/jenkins_home/cosign verify --key $COSIGN_PUBLIC_KEY sundarbabu/petdemo:v3.0.0'
+                            sh '/var/jenkins_home/cosign verify --key $COSIGN_PUBLIC_KEY sundarbabu/petdemo:v3.0.0 | jq .'
                         }
                     }
                 }
