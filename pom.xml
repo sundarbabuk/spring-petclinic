@@ -133,12 +133,12 @@
     <repository>
         <id>central</id>
         <name>a0iul4mubvzal-artifactory-primary-0-releases</name>
-        <url>https://devsecopsdemo.jfrog.io/artifactory/libs-snapshot-local</url>
+        <url>https://devsecopsdemo.jfrog.io/artifactory/devsecops-libs-snapshot-local</url>
     </repository>
     <snapshotRepository>
         <id>snapshots</id>
         <name>a0iul4mubvzal-artifactory-primary-0-snapshots</name>
-        <url>https://devsecopsdemo.jfrog.io/artifactory/libs-snapshot-local</url>
+        <url>https://devsecopsdemo.jfrog.io/artifactory/devsecops-libs-snapshot-local</url>
     </snapshotRepository>
   </distributionManagement>
 
