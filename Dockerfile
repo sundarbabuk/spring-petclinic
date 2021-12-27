@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM openjdk:16-alpine3.13 AS builder
+FROM openjdk:16-alpine3.13 AS 
 
 WORKDIR /app
 
@@ -10,9 +10,6 @@ RUN ./mvnw dependency:go-offline
 
 COPY src ./src
 
-FROM gcr.io/distroless/java11-debian11
-COPY --from=builder /app /app
-WORKDIR /app
 
 CMD ["./mvnw", "spring-boot:run"]
 
