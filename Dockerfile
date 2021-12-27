@@ -10,6 +10,10 @@ RUN ./mvnw dependency:go-offline
 
 COPY src ./src
 
+FROM gcr.io/distroless/java11-debian11
+COPY --from=build-env /app /app
+WORKDIR /app
+
 CMD ["./mvnw", "spring-boot:run"]
 
 LABEL org.opencontainers.image.source https://github.com/sundarbabuk/spring-petclinic
