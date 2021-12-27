@@ -140,17 +140,9 @@
         <name>a0iul4mubvzal-artifactory-primary-0-snapshots</name>
         <url>https://devsecopsdemo.jfrog.io/artifactory/default-maven-virtual</url>
     </snapshotRepository>
-</distributionManagement>
-
-
-  <distributionManagement>
-    <snapshotRepository>
-        <id>snapshots</id>
-        <name>a0iul4mubvzal-artifactory-primary-0-snapshots</name>
-        <url>https://devsecopsdemo.jfrog.io/artifactory/demo-libs-snapshot-local</url>
-    </snapshotRepository>
   </distributionManagement>
 
+  
   <build>
     <plugins>
       <plugin>
