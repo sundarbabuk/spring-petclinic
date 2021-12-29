@@ -136,7 +136,7 @@ pipeline {
                         docker.withRegistry( '', 'dockerhub' ) {
                             sh '/var/jenkins_home/cosign version'
                             sh '/var/jenkins_home/cosign sign --key $COSIGN_PRIVATE_KEY sundarbabu/petdemo:v3.0.0'
-                            sh '/var/jenkins_home/cosign verify --key $COSIGN_PUBLIC_KEY sundarbabu/petdemo:v3.0.0 | jq .'
+                            sh '/var/jenkins_home/cosign verify --key $COSIGN_PUBLIC_KEY sundarbabu/petdemo:v3.0.0 | /var/jenkins_home/jq .'
                         }
                     }
                 }
