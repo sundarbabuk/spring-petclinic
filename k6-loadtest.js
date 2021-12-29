@@ -25,13 +25,13 @@ export default function () {
   ]
   for (const page of pages) {
     const resHome = http.get(
-      "https://www.devopstoolkitseries.com",
+      "https://https://www.yahoo.com",
       {tags: {what: "home"}
     });
     check(resHome, {
       "status was 200": (r) => r.status == 200,
     });
-    const resPage = http.get("https://www.devopstoolkitseries.com" + page);
+    const resPage = http.get("https://www.yahoo.com" + page);
     check(resPage, {
       "status was 200": (r) => r.status == 200,
     });
