@@ -50,7 +50,14 @@ pipeline {
     ///     }
 
 
-           
+        stage('Performance Testing') {
+            steps {
+                echo 'Running K6 performance tests...'
+                sh 'k6 run /var/jenkins_home/k6-loadtest.js'
+                }
+            }
+
+
         stage("Dockerization") {
             failFast true
             parallel {
