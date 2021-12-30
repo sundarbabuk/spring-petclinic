@@ -1,0 +1,3 @@
+cd /path/to/oss-fuzz
+export PATH_TO_PROJECT=<path_to_your_project>
+python infra/helper.py generate --external --language=jvm $PATH_TO_PROJECT
