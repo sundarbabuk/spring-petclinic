@@ -1,6 +1,6 @@
 #!/bin/bash -eu
 
-./buildconf.sh
+# ./buildconf.sh
 # configure scripts usually use correct environment variables.
 ./configure
 
