@@ -2,7 +2,7 @@
 
 # ./buildconf.sh
 # configure scripts usually use correct environment variables.
-./configure
+# ./configure
 
 make clean
 make -j$(nproc) all
