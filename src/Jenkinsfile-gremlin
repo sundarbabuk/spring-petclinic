@@ -1,0 +1,38 @@
+pipeline {
+    agent none
+    environment {
+        ATTACK_ID = ''
+        GREMLIN_API_KEY = credentials('gremlin-api-key')
+        GREMLIN_TEAM_ID = credentials('gremlin-team-id')
+    }
+    parameters {
+        string(name: 'TARGET_IDENTIFIER', defaultValue: 'gremlin-demo-lab-host', description: 'Host to target')
+        string(name: 'CPU_LENGTH', defaultValue: '30', description: 'Duration of CPU attack')
+        string(name: 'CPU_CORE', defaultValue: '1', description: 'Number of cores to impact')
+        string(name: 'CPU_CAPACITY', defaultValue: '100', description: 'The percentage of total CPU capacity to consume')
+    }
+    stages {
+        stage('Initialize test environment') {
+            steps{
+                echo "[Add commands to create a test environment.]"
+            }
+        }
+        stage('Install application to test environment') {
+            steps{
+                echo "[Add commands to deploy your application to your test environment.]"
+            }
+        }
+        stage('Run chaos experiment') {
+            agent any
+            steps {
+                script {
+                    ATTACK_ID = sh (
+                        script: "curl -s -H 'Content-Type: application/json;charset=utf-8' -H 'Authorization: Key ${GREMLIN_API_KEY}' https://api.gremlin.com/v1/attacks/new?teamId=${GREMLIN_TEAM_ID} --data '{ \"command\": { \"type\": \"cpu\", \"args\": [\"-c\", \"$CPU_CORE\", \"-l\", \"$CPU_LENGTH\", \"-p\", \"$CPU_CAPACITY\"] },\"target\": { \"type\": \"Exact\", \"hosts\" : { \"ids\": [\"$TARGET_IDENTIFIER\"] } } }' --compressed",
+                        returnStdout: true
+                    ).trim()
+                echo "View your experiment at https://app.gremlin.com/attacks/${ATTACK_ID}"
+                }
+            }
+        }
+    }
+}
