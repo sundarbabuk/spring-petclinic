@@ -161,7 +161,7 @@ pipeline {
             }
         }
 
-        stage("Sign & Push Image to Registry") {
+        stage("Sign & Push Image to Dockerhub") {
             steps {
                 script {
                     docker.withTool('docker') {
@@ -172,6 +172,53 @@ pipeline {
                 }
             }
         }
+
+        stage("SBOM Generation & Attestation") {
+            steps {
+                script {
+                    docker.withTool('docker') {
+                        docker.withRegistry( '', 'dockerhub' ) {
+                            sh '/var/jenkins_home/syft sundarbabu/petdemo:v3.0.0 -o json > /var/jenkins_home/sbom.syft.json'
+                            sh '/var/jenkins_home/cosign attest -predicate /var/jenkins_home/sbom.syft.json --key $COSIGN_PRIVATE_KEY sundarbabu/petdemo:v3.0.0'
+                            sh '/var/jenkins_home/cosign verify-attestation --key $COSIGN_PUBLIC_KEY sundarbabu/petdemo:v3.0.0'
+    ///                         sh 'rm /var/jenkins_home/workspace/Springboot-App/sbom.syft.json'
+                        }
+                    }
+                }
+            }
+        }
+
+
+        stage("Vulnerabilty Scan & Attestation") {
+            steps {
+                script {
+                    docker.withTool('docker') {
+                        docker.withRegistry( '', 'dockerhub' ) {
+                            sh '/var/jenkins_home/grype sbom:/var/jenkins_home/sbom.syft.json -o json > /var/jenkins_home/vulnerability-report.grype.json'
+                            sh '/var/jenkins_home/cosign attest -predicate /var/jenkins_home/vulnerability-report.grype.json --key $COSIGN_PRIVATE_KEY sundarbabu/petdemo:v3.0.0'
+                            sh 'rm /var/jenkins_home/vulnerability-report.grype.json'
+                            
+                        }
+                    }
+                }
+            }
+        }
+
+
+        stage("Sign Image & Validate") {
+            steps {
+                script {
+                    docker.withTool('docker') {
+                        docker.withRegistry( '', 'dockerhub' ) {
+                            sh '/var/jenkins_home/cosign version'
+                            sh '/var/jenkins_home/cosign sign --key $COSIGN_PRIVATE_KEY sundarbabu/petdemo:v3.0.0'
+                            sh '/var/jenkins_home/cosign verify --key $COSIGN_PUBLIC_KEY sundarbabu/petdemo:v3.0.0'
+                        }
+                    }
+                }
+            }
+        }
+
 
         stage ('Push image to Artifactory') {
             steps {
