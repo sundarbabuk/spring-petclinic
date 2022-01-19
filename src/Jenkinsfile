@@ -50,14 +50,14 @@ pipeline {
 
     stages {
 
-        stage("1-Code Build") {
+        stage("Code Build") {
             steps {
                 sh "${mvnCMD} clean install -DskipTests"
     //             sh "mvn clean install -DskipTests"
             }
         }
 
-        stage("2-Unit Test") {
+        stage("Unit Test") {
             steps {
                 sh "${mvnCMD} test"
         //         sh "mvn test"
@@ -65,7 +65,7 @@ pipeline {
             }
         }
 
-        stage('3-Staticcode Aanalysis') {
+        stage('Staticcode Aanalysis') {
     //         tools {
     //             jdk "jdk11" 
     //         }
@@ -80,7 +80,7 @@ pipeline {
             }
         }
 
-        stage("4-Code Quality Gate") {
+        stage("Code Quality Gate") {
             steps {
               sleep(30)
                 waitForQualityGate abortPipeline: true
@@ -88,7 +88,7 @@ pipeline {
             }
 
 
-        stage('5-Code Security (SAST) Test') {
+        stage('Code Security (SAST) Test') {
             steps {
                 echo 'Static Application Security Testing under progress...'
                 snykSecurity(
@@ -163,10 +163,7 @@ pipeline {
         }
 
         
-        stage("DockerImage -Sign, Attest & Push") {
-            failFast true
-            parallel {
-        stage("1-SBOM Attestation") {
+        stage("SBOM Attestation") {
             steps {
                 script {
                     docker.withTool('docker') {
@@ -182,7 +179,7 @@ pipeline {
         }
 
 
-        stage("2-Vulnerabilty Scan Attestation") {
+        stage("Vulnerabilty Scan Attestation") {
             steps {
                 script {
                     docker.withTool('docker') {
@@ -198,7 +195,7 @@ pipeline {
         }
 
 
-        stage("3-Image: Sign, Push & Validate") {
+        stage("Image: Sign, Push & Validate") {
             steps {
                 script {
                     docker.withTool('docker') {
@@ -213,7 +210,7 @@ pipeline {
         }
 
 
-        stage("4-Sign & Push Image to Dockerhub") {
+        stage("Sign & Push Image to Dockerhub") {
             steps {
                 script {
                     docker.withTool('docker') {
@@ -226,7 +223,7 @@ pipeline {
         }
 
 
-        stage ('5-Push image to Artifactory') {
+        stage ('Push image to Artifactory') {
             steps {
                 rtDockerPush(
                     serverId: "artifactory",
@@ -235,9 +232,6 @@ pipeline {
                     // Attach custom properties to the published artifacts:
                     properties: 'project-name=docker1;status=stable'
                 )
-
-                    }
-                }
             }
         }
         
