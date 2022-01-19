@@ -49,15 +49,18 @@ pipeline {
     }
 
     stages {
-      
-        stage("Build") {
+
+        stage("Build & DevTest") {
+            failFast true
+            parallel {
+        stage("1-Code Build") {
             steps {
                 sh "${mvnCMD} clean install -DskipTests"
     //             sh "mvn clean install -DskipTests"
             }
         }
 
-        stage("Unit Test") {
+        stage("2-Unit Test") {
             steps {
                 sh "${mvnCMD} test"
         //         sh "mvn test"
@@ -65,7 +68,7 @@ pipeline {
             }
         }
 
-        stage('Staticcode Aanalysis') {
+        stage('3-Staticcode Aanalysis') {
     //         tools {
     //             jdk "jdk11" 
     //         }
@@ -80,7 +83,7 @@ pipeline {
             }
         }
 
-        stage("Code Quality Gate") {
+        stage("4-Code Quality Gate") {
             steps {
               sleep(30)
                 waitForQualityGate abortPipeline: true
@@ -88,7 +91,7 @@ pipeline {
             }
 
 
-        stage('Code Security (SAST) Test') {
+        stage('5-Code Security (SAST) Test') {
             steps {
                 echo 'Static Application Security Testing under progress...'
                 snykSecurity(
@@ -96,6 +99,10 @@ pipeline {
                 snykTokenId: 'snyk',
                 failOnIssues: 'false'
                 )
+
+                   }
+
+                }
             }
         }
 
