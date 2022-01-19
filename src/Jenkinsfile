@@ -168,19 +168,11 @@ pipeline {
             }
         }
 
-        stage("Sign & Push Image to Dockerhub") {
-            steps {
-                script {
-                    docker.withTool('docker') {
-                        docker.withRegistry( '', 'dockerhub' ) { 
-                        dockerImage.push ()
-                        }
-                    }
-                }
-            }
-        }
-
-        stage("SBOM Generation & Attestation") {
+        
+        stage("DockerImage -Sign, Attest & Push") {
+            failFast true
+            parallel {
+        stage("1-SBOM Attestation") {
             steps {
                 script {
                     docker.withTool('docker') {
@@ -196,7 +188,7 @@ pipeline {
         }
 
 
-        stage("Vulnerabilty Scan & Attestation") {
+        stage("2-Vulnerabilty Scan Attestation") {
             steps {
                 script {
                     docker.withTool('docker') {
@@ -212,7 +204,7 @@ pipeline {
         }
 
 
-        stage("Sign Image & Validate") {
+        stage("3-Image: Sign, Push & Validate") {
             steps {
                 script {
                     docker.withTool('docker') {
@@ -227,7 +219,20 @@ pipeline {
         }
 
 
-        stage ('Push image to Artifactory') {
+        stage("4-Sign & Push Image to Dockerhub") {
+            steps {
+                script {
+                    docker.withTool('docker') {
+                        docker.withRegistry( '', 'dockerhub' ) { 
+                        dockerImage.push ()
+                        }
+                    }
+                }
+            }
+        }
+
+
+        stage ('5-Push image to Artifactory') {
             steps {
                 rtDockerPush(
                     serverId: "artifactory",
@@ -236,11 +241,14 @@ pipeline {
                     // Attach custom properties to the published artifacts:
                     properties: 'project-name=docker1;status=stable'
                 )
+
+                    }
+                }
             }
         }
         
 
-        stage("Test Automation") {
+        stage("QA / Test Automation") {
             failFast true
             parallel {
         stage("1-Deploy App -Test Env") {
