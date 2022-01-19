@@ -50,9 +50,6 @@ pipeline {
 
     stages {
 
-        stage("Build & DevTest") {
-            failFast true
-            parallel {
         stage("1-Code Build") {
             steps {
                 sh "${mvnCMD} clean install -DskipTests"
@@ -100,9 +97,6 @@ pipeline {
                 failOnIssues: 'false'
                 )
 
-                   }
-
-                }
             }
         }
 
