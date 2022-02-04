@@ -249,8 +249,8 @@ pipeline {
         stage('2-Performance Test') {
             steps {
                 echo 'Running K6 performance tests...'
-        //         sh '/var/jenkins_home/k6 run /var/jenkins_home/k6-loadtest-noabort.js'
-                sh '/var/jenkins_home/k6 run --vus 10 --duration 30s --out influxdb=https://172.29.0.7:8086/myk6db script.js'
+                sh '/var/jenkins_home/k6 run /var/jenkins_home/k6-loadtest-noabort.js'
+        //         sh '/var/jenkins_home/k6 run --vus 10 --duration 30s --out influxdb=https://172.29.0.7:8086/myk6db script.js'
                 }
             }
 
