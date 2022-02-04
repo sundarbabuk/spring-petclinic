@@ -241,7 +241,7 @@ pipeline {
             parallel {
         stage("1-Deploy App -Test Env") {
             steps {
-                sh 'docker run -d -p 8081:8080 sundarbabu/petdemo:v3.0.0'
+                sh 'docker run -d -p 8087:8080 sundarbabu/petdemo:v3.0.0'
             }
         }
         
