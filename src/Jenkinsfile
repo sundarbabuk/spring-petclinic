@@ -268,16 +268,16 @@ pipeline {
                     }
                 } 
 
-        stage("4-DAST Test") {
-            steps {
-                sh '''
-                    docker run -v ${WORKSPACE}:/hawk:rw -t \
-                        -e API_KEY=${STACKHAWK_API_KEY} \
-                        -e NO_COLOR=true \
-                        stackhawk/hawkscan
-                ''' 
-                    }
-                }
+        // stage("4-DAST Test") {
+        //     steps {
+        //         sh '''
+        //             docker run -v ${WORKSPACE}:/hawk:rw -t \
+        //                 -e API_KEY=${STACKHAWK_API_KEY} \
+        //                 -e NO_COLOR=true \
+        //                 stackhawk/hawkscan
+        //         ''' 
+        //             }
+        //         }
             }
         }
         
