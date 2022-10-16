@@ -283,7 +283,7 @@ pipeline {
 
                 stage("7-Generate SBOM") {
                     steps {
-                        echo "Completed Successfully"
+                        echo "Completed Successfully!"
                     }
                 }
             }
