@@ -95,20 +95,20 @@ pipeline {
         stage("Security Scan") {
             failFast true
             parallel {
-                stage("1-Image-Vulnerability Analysis") {
+                stage("1-ImageVulnerabilityCheck") {
                     steps {
                         echo "Complete"
                     }
                 }
 
 
-                stage("2-Attest Vulnerability Analysis Report") {
+                stage("2-AttestVulnerabilityReport") {
                     steps {
                         echo "Complete"
                     }
                 }
                                
-                stage("3-STIG Compliance Check") {
+                stage("3-STIG ComplianceCheck") {
                     steps {
                         echo "Complete"
                     }
@@ -202,7 +202,7 @@ pipeline {
                     }
                 }
 
-                stage("4-SBOM Info") {
+                stage("4-Push SBOM Info") {
                     steps {
                         echo "Complete"
                     }
@@ -264,25 +264,25 @@ pipeline {
                     }
                 }
 
-                stage("9-IAST") {
+                stage("9a-IAST") {
                     steps {
                         echo "Complete"
                     }
                 }
 
-                stage("10-Pen Test") {
+                stage("9b-Pen Test") {
                     steps {
                         echo "Complete"
                     }
                 }
 
-                stage("11-Functional Test") {
+                stage("9c-Functional Test") {
                     steps {
                         echo "Complete"
                     }
                 }
 
-                stage("12-UAT") {
+                stage("9d-UAT") {
                     steps {
                         echo "Complete"
                     }
