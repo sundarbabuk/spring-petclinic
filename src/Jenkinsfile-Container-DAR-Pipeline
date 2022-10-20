@@ -314,13 +314,32 @@ pipeline {
         stage("Decommision Test Image") {
             failFast true
             parallel {
-                stage("1-Stop Container") {
+                stage("1-Stop Test Container") {
                     steps {
                         echo "Complete"
                     }
                 }
                                
-                stage("2-Remove Container") {
+                stage("2-Remove Test Container") {
+                    steps {
+                        echo "Complete"
+                    }
+                }
+                  
+            }
+        }
+
+
+        stage("Decommision Build Container") {
+            failFast true
+            parallel {
+                stage("1-Stop Build Container") {
+                    steps {
+                        echo "Complete"
+                    }
+                }
+                               
+                stage("2-Remove Build Container") {
                     steps {
                         echo "Complete"
                     }
@@ -333,13 +352,19 @@ pipeline {
         stage("Notify Build Status") {
             failFast true
             parallel {
-                stage("1-E-mail build status") {
+                stage("1-Update Task (Polarion/Jira)") {
+                    steps {
+                        echo "Complete"
+                    }
+                }
+
+                stage("2-E-mail build status") {
                     steps {
                         echo "Complete"
                     }
                 }
                                
-                stage("2-IM build status") {
+                stage("3-IM build status") {
                     steps {
                         echo "Complete"
                     }
