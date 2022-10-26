@@ -109,7 +109,7 @@ pipeline {
             }
         }
 
-        
+
         stage("SBOM") {
             failFast true
             parallel {
@@ -128,7 +128,7 @@ pipeline {
             }
         }
 
-        
+
         stage("Security Scan") {
             failFast true
             parallel {
@@ -351,7 +351,7 @@ pipeline {
         stage("Notify Build Status") {
             failFast true
             parallel {
-                stage("1-Update Task (Polarion/Jira)") {
+                stage("1-Update Story (Polarion/Jira)") {
                     steps {
                         echo "Complete"
                     }
