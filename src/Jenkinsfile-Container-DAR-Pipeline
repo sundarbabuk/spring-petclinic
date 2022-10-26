@@ -54,6 +54,24 @@ pipeline {
         }
 
 
+        stage("Image Provenance") {
+            failFast true
+            parallel {
+                stage("1-Provenance Creation") {
+                    steps {
+                        echo "Complete"
+                    }
+                }
+                               
+                stage("2-Provenance Attestation") {
+                    steps {
+                        echo "Complete"
+                    }
+                }
+                  
+            }
+        }
+
         stage("Image Sanity Check") {
             failFast true
             parallel {
@@ -91,7 +109,26 @@ pipeline {
             }
         }
 
+        
+        stage("SBOM") {
+            failFast true
+            parallel {
+                stage("1-SBOM Creation") {
+                    steps {
+                        echo "Complete"
+                    }
+                }
+                               
+                stage("2-SBOM Attestation") {
+                    steps {
+                        echo "Complete"
+                    }
+                }
+                  
+            }
+        }
 
+        
         stage("Security Scan") {
             failFast true
             parallel {
@@ -123,45 +160,7 @@ pipeline {
             }
         }
 
-
-        stage("Image Provenance") {
-            failFast true
-            parallel {
-                stage("1-Provenance Creation") {
-                    steps {
-                        echo "Complete"
-                    }
-                }
-                               
-                stage("2-Provenance Attestation") {
-                    steps {
-                        echo "Complete"
-                    }
-                }
-                  
-            }
-        }
-
-
-        stage("SBOM") {
-            failFast true
-            parallel {
-                stage("1-SBOM Creation") {
-                    steps {
-                        echo "Complete"
-                    }
-                }
-                               
-                stage("2-SBOM Attestation") {
-                    steps {
-                        echo "Complete"
-                    }
-                }
-                  
-            }
-        }
-
-
+                
         stage("Image Signing") {
             failFast true
             parallel {
