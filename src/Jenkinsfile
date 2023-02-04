@@ -283,7 +283,7 @@ pipeline {
         //         }
 
         stage("4-DAST Test") {
-             steps {
+            steps {
                 echo 'Pull Dastardly Image'
                 sh 'docker pull ${IMAGE_WITH_TAG}'
                 cleanWs()
@@ -297,23 +297,22 @@ pipeline {
 
         }
 
-        stage("Post DAST Results") { 
+        stage("5-Post DAST Results") { 
             steps {
                 post {
                     always {
                         junit testResults: "${JUNIT_TEST_RESULTS_FILE}", skipPublishingChecks: true
-                            }
                         }
                     }
-
                 }
             }
-        
+                    
     
         stage("E-mail CI Status") {
             steps {
                 emailext (attachLog: false, body: 'Jenkins Build E-mail Test', subject: 'Jenkins Build E-mail Test', to: 'sundar_babu@hotmail.com')
-            } 
-        }
-    }   
+                } 
+            }
+        }   
+    }
 } 
