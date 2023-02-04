@@ -29,7 +29,7 @@ pipeline {
         COSIGN_PASSWORD=credentials('cosign-password')
         COSIGN_PRIVATE_KEY=credentials('cosign-private-key')
         COSIGN_PUBLIC_KEY=credentials('cosign-public-key')
-        DASTARDLY_TARGET_URL='http://localhost:8087/'
+        DASTARDLY_TARGET_URL='https://ginandjuice.shop/'
         IMAGE_WITH_TAG='public.ecr.aws/portswigger/dastardly:latest'
         JUNIT_TEST_RESULTS_FILE='DAST-dastardly-report.xml'
     //     DOCKER_CONTENT_TRUST=1
