@@ -297,8 +297,8 @@ pipeline {
 
         }
 
-        stage ("Post DAST Results") { 
-            step {
+        stage("Post DAST Results") { 
+            steps {
                 post {
                     always {
                         junit testResults: "${JUNIT_TEST_RESULTS_FILE}", skipPublishingChecks: true
