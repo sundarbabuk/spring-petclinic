@@ -282,22 +282,28 @@ pipeline {
         //             }
         //         }
 
-        stage("4-DAST Test") {
+
+        stage ("4-Pull DAST Image") {
             steps {
-                echo 'Pull Dastardly Image'
                 sh 'docker pull ${IMAGE_WITH_TAG}'
+                }
+            }
+
+
+        stage("5-DAST Test") {
+            steps {
                 cleanWs()
                 sh '''
-                docker run --rm --user $(id -u) -v ${WORKSPACE}:${WORKSPACE}:rw \
-                -e DASTARDLY_TARGET_URL=${DASTARDLY_TARGET_URL} \
-                -e DASTARDLY_OUTPUT_FILE=${WORKSPACE}/${JUNIT_TEST_RESULTS_FILE} \
-                ${IMAGE_WITH_TAG}
+                    docker run --rm --user $(id -u) -v ${WORKSPACE}:${WORKSPACE}:rw \
+                    -e DASTARDLY_TARGET_URL=${DASTARDLY_TARGET_URL} \
+                    -e DASTARDLY_OUTPUT_FILE=${WORKSPACE}/${JUNIT_TEST_RESULTS_FILE} \
+                    ${IMAGE_WITH_TAG}
                 '''
             }
 
         }
 
-        stage("5-Post DAST Results") { 
+        stage("6-Post DAST Results") { 
             steps {
                 post {
                     always {
