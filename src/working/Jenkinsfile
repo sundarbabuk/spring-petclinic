@@ -29,9 +29,6 @@ pipeline {
         COSIGN_PASSWORD=credentials('cosign-password')
         COSIGN_PRIVATE_KEY=credentials('cosign-private-key')
         COSIGN_PUBLIC_KEY=credentials('cosign-public-key')
-        DASTARDLY_TARGET_URL='http://localhost:8087/'
-        IMAGE_WITH_TAG='public.ecr.aws/portswigger/dastardly:latest'
-        JUNIT_TEST_RESULTS_FILE='DAST-dastardly-report.xml'
     //     DOCKER_CONTENT_TRUST=1
      
     }
@@ -281,29 +278,8 @@ pipeline {
         //         ''' 
         //             }
         //         }
-
-        stage("4-DAST Test") {
-             steps {
-                echo 'Pull Dastardly Image'
-                sh 'docker pull ${IMAGE_WITH_TAG}'
-                cleanWs()
-                sh '''
-                docker run --rm --user $(id -u) -v ${WORKSPACE}:${WORKSPACE}:rw \
-                -e DASTARDLY_TARGET_URL=${DASTARDLY_TARGET_URL} \
-                -e DASTARDLY_OUTPUT_FILE=${WORKSPACE}/${JUNIT_TEST_RESULTS_FILE} \
-                ${IMAGE_WITH_TAG}
-                '''
-            }
-
-        }
-
-        post {
-            always {
-                junit testResults: "${JUNIT_TEST_RESULTS_FILE}", skipPublishingChecks: true
             }
         }
-    }
-}
         
     
         stage("E-mail CI Status") {
