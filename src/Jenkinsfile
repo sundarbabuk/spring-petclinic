@@ -60,13 +60,13 @@ pipeline {
             }
         }
 
-        // stage("Unit Test") {
-        //     steps {
-        //         sh "${mvnCMD} test"
+         stage("Unit Test") {
+             steps {
+                 sh "${mvnCMD} test"
         ////         sh "mvn test"
-        //         junit 'target/surefire-reports/*.xml'
-        //     }
-        // }
+                 junit 'target/surefire-reports/*.xml'
+             }
+         }
 
         stage('Staticcode Aanalysis') {
     //         tools {
