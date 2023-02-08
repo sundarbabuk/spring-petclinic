@@ -29,6 +29,9 @@ pipeline {
         COSIGN_PASSWORD=credentials('cosign-password')
         COSIGN_PRIVATE_KEY=credentials('cosign-private-key')
         COSIGN_PUBLIC_KEY=credentials('cosign-public-key')
+        DASTARDLY_TARGET_URL='https://ginandjuice.shop/'
+        IMAGE_WITH_TAG='public.ecr.aws/portswigger/dastardly:latest'
+        JUNIT_TEST_RESULTS_FILE='DAST-dastardly-report.xml'
     //     DOCKER_CONTENT_TRUST=1
      
     }
@@ -58,12 +61,12 @@ pipeline {
         }
 
         // stage("Unit Test") {
-        //     steps {
-        //         sh "${mvnCMD} test"
+        //      steps {
+        //          sh "${mvnCMD} test"
         ////         sh "mvn test"
-        //         junit 'target/surefire-reports/*.xml'
-        //     }
-        // }
+        //          junit 'target/surefire-reports/*.xml'
+        //      }
+        //  }
 
         stage('Staticcode Aanalysis') {
     //         tools {
@@ -278,25 +281,45 @@ pipeline {
         //         ''' 
         //             }
         //         }
+
+
+        stage ("4-Pull DAST Image") {
+            steps {
+                sh 'docker pull ${IMAGE_WITH_TAG}'
+                }
             }
+
+
+        stage("5-DAST Test") {
+            steps {
+                
+                sh '''
+                    docker run --rm --user $(id -u) -v ${WORKSPACE}:${WORKSPACE}:rw \
+                    -e DASTARDLY_TARGET_URL=${DASTARDLY_TARGET_URL} \
+                    -e DASTARDLY_OUTPUT_FILE=${WORKSPACE}/${JUNIT_TEST_RESULTS_FILE} \
+                    ${IMAGE_WITH_TAG}
+                '''
+            }
+
         }
-        
+
+        // stage("6-Post DAST Results") { 
+        //     steps {
+        //         post {
+        //             always {
+        //                 junit testResults: "${JUNIT_TEST_RESULTS_FILE}", skipPublishingChecks: true
+        //                 }
+        //             }
+        //         }
+        //     }
+                    
     
         stage("E-mail CI Status") {
             steps {
                 emailext (attachLog: false, body: 'Jenkins Build E-mail Test', subject: 'Jenkins Build E-mail Test', to: 'sundar_babu@hotmail.com')
-            } 
+                    } 
+                }
+            }   
         }
-    }   
-}      
-        
-
-    //     stage('Cleaning up Registry') { 
-    //         steps { 
-    //             sh "docker rmi $registry:$BUILD_NUMBER"
-    //             sh "docker rmi $registry:v1.0.0"
-    //         }
-    //     }
-                
-
-
+    }
+} 
