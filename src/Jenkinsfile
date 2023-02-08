@@ -65,7 +65,7 @@ pipeline {
         //     }
         // }
 
-        stage('Staticcode Aanalysis') {
+        stage('Staticcode Aanalysiss') {
     //         tools {
     //             jdk "jdk11" 
     //         }
