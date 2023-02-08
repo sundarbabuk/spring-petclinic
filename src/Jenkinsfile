@@ -112,7 +112,7 @@ pipeline {
             }
         }
 
-        stage("2-Docker Image Aanalysiss") {
+        stage("2-Docker Image Aanalysis") {
             steps {
                 sh '/var/jenkins_home/dive sundarbabu/petdemo:v3.0.0'
             } 
